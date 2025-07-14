@@ -2,6 +2,8 @@ from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKe
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 
+from django.utils import timezone
+
 from django.db import models
 
 from blog.models import Post
@@ -18,10 +20,12 @@ class Book(models.Model):
     title = models.CharField(max_length=250, unique=True)
     subtitle = models.CharField(max_length=250, unique=True)
     slug = models.SlugField(max_length=250, unique=True)
-    date = models.DateField(auto_now_add=True)
+    # date = models.DateField(auto_now_add=True)
+    date = models.DateField(default=timezone.now)
     path = models.CharField(max_length=255, null=True, blank=True)
-    image = models.CharField(max_length=255, null=True, blank=True)
-    content = models.CharField(max_length=500)
+    image = models.FileField(upload_to='books/', null=True, blank=True)
+    content = models.TextField()
+    description = models.CharField(max_length=500)
     posted = models.CharField(max_length=3, choices=POSTED_CHOICES, default='not')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='books')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -58,8 +62,6 @@ class Payment(models.Model):
     trace = models.CharField(max_length=2000)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    path = models.CharField(max_length=255, null=True, blank=True)
-    image = models.CharField(max_length=255, null=True, blank=True)
     content = models.CharField(max_length=500)
     
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
