@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,8 +40,24 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'store',
-    'user'
+    'user',
+    'django_ckeditor_5',
 ]
+
+# CKEDITOR
+CKEDITOR_5_CONFIGS = {
+    'default': {
+        'toolbar': {
+            'items': ['heading', '|', 'bold', 'italic', 'link',
+                        'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', ],
+                    }
+
+    }
+}
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
+# CKEDITOR
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

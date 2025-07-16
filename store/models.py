@@ -1,14 +1,19 @@
 from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-
 from django.utils import timezone
+
+from django_ckeditor_5.fields import CKEditor5Field
 
 from django.db import models
 
 from blog.models import Post
 
-# Create your models here.
+import os
+
+def upload_to_path(instance, filename):
+   # Usamos el campo `path` del modelo para definir la carpeta
+   return os.path.join('books', instance.path, filename)
 
 class Book(models.Model):
     
@@ -23,8 +28,10 @@ class Book(models.Model):
     # date = models.DateField(auto_now_add=True)
     date = models.DateField(default=timezone.now)
     path = models.CharField(max_length=255, null=True, blank=True)
-    image = models.FileField(upload_to='books/', null=True, blank=True)
-    content = models.TextField()
+    # image = models.FileField(upload_to='books/', null=True, blank=True)
+    image = models.FileField(upload_to=upload_to_path, null=True, blank=True)
+    # content = models.TextField()
+    content = CKEditor5Field('Content', config_name='default', blank=True, null=True)
     description = models.CharField(max_length=500)
     posted = models.CharField(max_length=3, choices=POSTED_CHOICES, default='not')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='books')
