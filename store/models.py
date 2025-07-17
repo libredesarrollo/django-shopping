@@ -12,7 +12,7 @@ from blog.models import Post
 import os
 
 def upload_to_path(instance, filename):
-   # Usamos el campo `path` del modelo para definir la carpeta
+
    return os.path.join('books', instance.path, filename)
 
 class Book(models.Model):
@@ -62,14 +62,12 @@ class Payment(models.Model):
         ]
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    posted = models.CharField(max_length=10, choices=PAYMENT_CHOICES, default='paypal')
+    type = models.CharField(max_length=10, choices=PAYMENT_CHOICES, default='paypal')
     coupon = models.CharField(max_length=100, null=True, blank=True)
     orderId = models.CharField(max_length=500, unique=True)
     price = models.DecimalField(max_digits=7, decimal_places=2, default=0.00)
     trace = models.CharField(max_length=2000)
     created_at = models.DateTimeField(auto_now_add=True)
-
-    content = models.CharField(max_length=500)
     
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
