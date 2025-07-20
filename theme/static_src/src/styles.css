@@ -8,3 +8,16 @@
   * the scope of this path.
   */
 @source "../../../**/*.{html,py,js}";
+
+/* card */
+.card {
+  @apply dark:bg-gray-800 bg-white shadow rounded-md
+}
+
+.card-primary {
+  @apply dark:bg-red-800 bg-red-200 shadow rounded-md
+}
+
+.card-body {
+  @apply px-4 py-5 sm:px-6
+}

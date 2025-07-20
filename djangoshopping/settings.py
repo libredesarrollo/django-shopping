@@ -49,7 +49,7 @@ INSTALLED_APPS = [
 #Tailwind
 TAILWIND_APP_NAME = 'theme'
 
-NPM_BIN_PATH = "C:/Users/andre/.config/herd/bin/nvm/v23.11.0/npm.cmd"
+# NPM_BIN_PATH = "C:/Users/andre/.config/herd/bin/nvm/v23.11.0/npm.cmd"
 
 # CKEDITOR
 CKEDITOR_5_CONFIGS = {

@@ -23,7 +23,7 @@ class PostIndex(ListView):
 
         if search:
             queryset = queryset.filter(
-                Q(id__icontains=search) |
+                # Q(id__icontains=search) |
                 Q(title__icontains=search) |
                 Q(description__icontains=search)
             )
