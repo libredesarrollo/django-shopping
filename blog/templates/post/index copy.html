@@ -1,5 +1,4 @@
 {% extends "master.html" %}
-{% load static %}
 
 {% block content %}
 
@@ -10,13 +9,13 @@
     <a href="http://" class="btn-lg btn-success">btn LG</a>
 
     <a href="http://" class="btn-lg btn-danger">btn danger LG</a>
-
+    
     <a href="http://" class="btn-sm btn-success-border">btn SM</a>
     <a href="http://" class="btn btn-success-border">btn</a>
     <a href="http://" class="btn-lg btn-success-border">btn LG</a>
 </div>
 
-<form method="get" class="grid grid-cols-2 gap-2 max-w-4xl mx-auto">
+    <form method="get" class="grid grid-cols-2 gap-2 max-w-4xl mx-auto">
         <input type="text" name="search" value="{{ request.GET.search }}" placeholder="Search..." class="w-full">
 
         <select name="category_id" class="w-full">
@@ -47,47 +46,9 @@
         </div>
     </form>
 
-
-<div class="flex flex-col items-center mt-5">
-    <div class="w-full sm:max-w-4xl overflow-hidden">
-        {% for p in posts %}
-        <div class="mt-4">
-            <h3 class="uppercase text-center no-underline text-2xl dark:text-white">{{ p.title }}</h3>
-            <p
-                class="tracking-widest text-center text-xs text-gray-500 italic sm:p-1 font-bold uppercase dark:text-gray-300">
-                {{ p.date }} - Andrés Cruz
-            </p>
-        </div>
-
-        <div class="grid @if (p.image) md:grid-cols-2 @endif gap-3">
-            {% if p.image %}
-
-            <img class="post" alt="{{ p.title }}" title="{{ p.title }}" src="{% static p.getImageUrl %}" />
-
-
-            {% endif %}
-
-            <p class="sm:mx-2 text-xl mt-6 dark:text-white">
-                <span> {{ p.category.title }}</span>
-                <span class="text-gray-700 dark:text-gray-300">
-                    {{ p.description }}
-                </span>
-            </p>
-        </div>
-
-        <p class="text-center mt-4">
-            <a variant='primary' class="btn btn-success" href="{% url 'b.show' p.slug %}">
-                {{ _('Show') }} </a>
+    {% for p in posts %}
+        <p>
+            {{ p.title }}
         </p>
-        {% endfor %}
-    </div>
-</div>
-
-
-
-
-<p>
-    {{ p.title }}
-</p>
-
+    {% endfor %}
 {% endblock content %}

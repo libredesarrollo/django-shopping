@@ -49,6 +49,12 @@ class Post(models.Model):
     # images = GenericRelation('store.Image')
     tags = GenericRelation('Taggable')
 
+    @property
+    def getImageUrl(self):
+        if self.image:
+            return self.image
+        return None
+
     def __str__(self):
         return self.title
     

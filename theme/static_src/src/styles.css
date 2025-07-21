@@ -21,3 +21,31 @@
 .card-body {
   @apply px-4 py-5 sm:px-6
 }
+/* card */
+
+/* btns */
+.btn {
+    @apply border rounded px-3 py-2 text-white font-medium transition-all duration-150 ease-in-out tracking-wider hover:shadow-xl shadow-lg inline-block transform hover:-translate-y-1 no-underline
+}
+
+.btn-sm {
+    @apply border rounded px-1 py-0 text-white font-light transition-all duration-150 ease-in-out tracking-wider hover:shadow-xl shadow-lg inline-block transform hover:-translate-y-1 no-underline
+}
+
+.btn-lg {
+    @apply border rounded px-5 py-4 text-white font-extrabold text-2xl transition-all duration-150 ease-in-out tracking-wider hover:shadow-xl inline-block shadow-lg transform hover:-translate-y-1 no-underline
+}
+
+.btn-success {
+    @apply bg-purple-900
+}
+
+.btn-danger {
+    @apply bg-red-600 hover:bg-red-900 border-red-600
+}
+
+.btn-success-border {
+    @apply  text-purple-600 hover:text-white border-purple-600 border-2 rounded hover:bg-purple-600
+}
+
+/* btns */
