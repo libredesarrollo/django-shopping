@@ -52,7 +52,8 @@ class Post(models.Model):
     @property
     def getImageUrl(self):
         if self.image:
-            return self.image
+            return self.image.url
+            # return self.path.join(self.image)
         return None
 
     def __str__(self):

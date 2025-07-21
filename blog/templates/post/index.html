@@ -62,7 +62,7 @@
         <div class="grid @if (p.image) md:grid-cols-2 @endif gap-3">
             {% if p.image %}
 
-            <img class="post" alt="{{ p.title }}" title="{{ p.title }}" src="{% static p.getImageUrl %}" />
+            <img class="post" alt="{{ p.title }}" title="{{ p.title }}" src="{{ p.getImageUrl }}" />
 
 
             {% endif %}
