@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 
+import platform
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -49,7 +51,10 @@ INSTALLED_APPS = [
 #Tailwind
 TAILWIND_APP_NAME = 'theme'
 
-# NPM_BIN_PATH = "C:/Users/andre/.config/herd/bin/nvm/v23.11.0/npm.cmd"
+
+NPM_BIN_PATH = os.environ.get('NPM_BIN_PATH', None)
+# if platform.system() == "Windows":
+#     NPM_BIN_PATH = "C:/Users/andre/.config/herd/bin/nvm/v23.11.0/npm.cmd"
 
 # CKEDITOR
 CKEDITOR_5_CONFIGS = {

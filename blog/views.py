@@ -5,6 +5,8 @@ from django.utils.dateparse import parse_date
 
 from .models import Post, Category, Tag
 
+import os
+
 class PostIndex(ListView):
     model = Post
     context_object_name = 'posts'
@@ -12,6 +14,9 @@ class PostIndex(ListView):
     paginate_by = 15
 
     def get_queryset(self):
+        print('***************************************')
+        print(os.environ.get('NPM_BIN_PATH', None))
+
         queryset = Post.objects.filter(posted='yes').select_related('category').prefetch_related('tags')
 
         search = self.request.GET.get('search', '')
