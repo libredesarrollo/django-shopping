@@ -17,35 +17,35 @@
 </div> {% endcomment %}
 
 <form method="get" class="grid grid-cols-2 gap-2 max-w-4xl mx-auto mt-5">
-        <input class='form-control' type="text" name="search" value="{{ request.GET.search }}" placeholder="Search..." class="w-full">
+    <input class='form-control' type="text" name="search" value="{{ request.GET.search }}" placeholder="Search..." class="w-full">
 
-        <select name="category_id" class='form-select'>
-            <option value="">Category</option>
-            {% for category in categories %}
-                <option value="{{ category.id }}" {% if request.GET.category_id == category.id|stringformat:"s" %}selected{% endif %}>{{ category.title }}</option>
-            {% endfor %}
-        </select>
+    <select name="category_id" class='form-select'>
+        <option value="">Category</option>
+        {% for category in categories %}
+            <option value="{{ category.id }}" {% if request.GET.category_id == category.id|stringformat:"s" %}selected{% endif %}>{{ category.title }}</option>
+        {% endfor %}
+    </select>
 
-        <select class='form-select' name="tag_id" class="w-full">
-            <option value="">Tag</option>
-            {% for tag in tags %}
-                <option value="{{ tag.id }}" {% if request.GET.tag_id == tag.id|stringformat:"s" %}selected{% endif %}>{{ tag.title }}</option>
-            {% endfor %}
-        </select>
+    <select class='form-select' name="tag_id" class="w-full">
+        <option value="">Tag</option>
+        {% for tag in tags %}
+            <option value="{{ tag.id }}" {% if request.GET.tag_id == tag.id|stringformat:"s" %}selected{% endif %}>{{ tag.title }}</option>
+        {% endfor %}
+    </select>
 
-        <select class='form-select'  name="language" class="w-full">
-            <option value=""></option>
-            <option value="english" {% if request.GET.language == "english" %}selected{% endif %}>English</option>
-            <option value="spanish" {% if request.GET.language == "spanish" %}selected{% endif %}>Spanish</option>
-        </select>
+    <select class='form-select'  name="language" class="w-full">
+        <option value=""></option>
+        <option value="english" {% if request.GET.language == "english" %}selected{% endif %}>English</option>
+        <option value="spanish" {% if request.GET.language == "spanish" %}selected{% endif %}>Spanish</option>
+    </select>
 
-        <input class='form-select'  type="date" name="from" value="{{ request.GET.from }}" class="w-full">
-        <input class='form-select'  type="date" name="to" value="{{ request.GET.to }}" class="w-full">
+    <input class='form-select'  type="date" name="from" value="{{ request.GET.from }}" class="w-full">
+    <input class='form-select'  type="date" name="to" value="{{ request.GET.to }}" class="w-full">
 
-        <div>
-            <button class='btn btn-success'  type="submit">Filtrar</button>
-        </div>
-    </form>
+    <div>
+        <button class='btn btn-success'  type="submit">Filtrar</button>
+    </div>
+</form>
 
 
 <div class="flex flex-col items-center mt-5">
