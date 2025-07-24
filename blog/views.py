@@ -69,3 +69,14 @@ class PostShow(DetailView): #DetailViewDetailViewDetailView
     template_name='post/show.html'
     slug_field = 'slug'            # Campo del modelo
     slug_url_kwarg = 'slug'        # Nombre en la URL
+
+
+class PostSitemap(ListView):
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'post/sitemap.html'
+
+    def render_to_response(self, context, **response_kwargs):
+        response_kwargs['content_type'] = 'application/xml'
+        context['base_url'] = self.request.build_absolute_uri('/').rstrip('/')
+        return super().render_to_response(context, **response_kwargs)

@@ -1,9 +1,8 @@
 {% extends "master.html" %}
 
 {% block content %}
-
     <div>
-        <section class="card mx-auto prose-lg mb-3">
+        <section class="card mx-auto mb-3">
             <div class="card-body">
                 <h1 class="text-center">{{ post.title }}</h1>
 
@@ -11,7 +10,7 @@
                     <img class="post" alt="{{ post.title }}" title="{{ post.title }}" src="{{ post.getImageUrl }}" />
                 {% endif %}
 
-                <div class="post">
+                <div class="post mt-4">
                     {{ post.content|safe }}
                 </div>
             </div>

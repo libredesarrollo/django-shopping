@@ -2,6 +2,8 @@ from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKe
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
+from django.urls import reverse
+
 from django_ckeditor_5.fields import CKEditor5Field
 
 from django.db import models
@@ -55,6 +57,9 @@ class Post(models.Model):
             return self.image.url
             # return self.path.join(self.image)
         return None
+    
+    def getRoute(self):
+        return reverse("b.show", args=[self.slug])
 
     def __str__(self):
         return self.title
