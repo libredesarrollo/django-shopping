@@ -2,13 +2,29 @@
 
 {% block content %}
     <div>
-        <section class="card mx-auto mb-3">
+        <section class="card mx-auto mb-3 prose-lg">
             <div class="card-body">
                 <h1 class="text-center">{{ post.title }}</h1>
 
                 {% if post.image %}
                     <img class="post" alt="{{ post.title }}" title="{{ post.title }}" src="{{ post.getImageUrl }}" />
                 {% endif %}
+
+                <p class="my-0 ml-2">
+                    <span class="text-center ml-4 mb-3 text-sm block text-gray-500 italic font-bold uppercase tracking-widest">
+                        {{ post.date }}
+                    </span>
+
+                    <a class="btn-sm btn-success" href="{% url 'b.index' %}?category_id={{ post.category.id }}">
+                        {{ post.category.title }}
+                    </a>
+
+                    {% for t in post.tags.all %}
+                        <a class="btn-sm btn-success-border" target="_blank" href="{% url 'b.index' %}?tag_id={{ t.id }}">
+                            {{ t.tag.title }}
+                        </a>
+                    {% endfor %}
+                </p>
 
                 <div class="post mt-4">
                     {{ post.content|safe }}
