@@ -11,8 +11,84 @@
   */
 @source "../../../**/*.{html,py,js}";
 
+@font-face {
+  font-family: 'PTSans-Bold';
+  src: url('/static/fonts/PTSans-Bold.ttf');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PTSans-Regular';
+  src: url('/static/fonts/PTSans-Regular.ttf');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBMPlexMono-Bold';
+  src: url('/static/fonts/IBMPlexMono-Bold.ttf');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBMPlexMono-Regular';
+  src: url('/static/fonts/IBMPlexMono-Regular.ttf');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBMPlexMono-Thin';
+  src: url('/static/fonts/IBMPlexMono-Thin.ttf');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PTSans-Italic';
+  src: url('/static/fonts/PTSans-Italic.ttf');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SUSE-ExtraBold';
+  src: url('/static/fonts/SUSE-ExtraBold.ttf');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SUSE-Regular';
+  src: url('/static/fonts/SUSE-Regular.ttf');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SUSE-SemiBold';
+  src: url('/static/fonts/SUSE-SemiBold.ttf');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ProtestGuerrilla-Regular';
+  src: url('/static/fonts/ProtestGuerrilla-Regular.ttf');
+  font-display: swap;
+}
+
 body {
   @apply dark:bg-gray-700
+}
+
+p,
+a,
+li {
+	font-family: SUSE-SemiBold;
+}
+h1 {
+    font-family: ProtestGuerrilla-Regular;
+}
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: SUSE-ExtraBold;
 }
 
 /* text */
