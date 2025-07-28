@@ -78,17 +78,19 @@ body {
 p,
 a,
 li {
-	font-family: SUSE-SemiBold;
+  font-family: SUSE-SemiBold;
 }
+
 h1 {
-    font-family: ProtestGuerrilla-Regular;
+  font-family: ProtestGuerrilla-Regular;
 }
+
 h2,
 h3,
 h4,
 h5,
 h6 {
-    font-family: SUSE-ExtraBold;
+  font-family: SUSE-ExtraBold;
 }
 
 /* text */
@@ -182,3 +184,22 @@ div.post img {
 }
 
 /* btns */
+
+/* youtube */
+.video-container {
+  aspect-ratio: 16 / 9;
+  margin: 15px auto;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+/* youtube */

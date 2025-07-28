@@ -60,7 +60,7 @@ CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': {
             'items': ['heading', '|', 'bold', 'italic', 'link',
-                        'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', ],
+                        'bulletedList', 'numberedList', 'blockQuote', 'imageUpload','sourceEditing', 'htmlEmbed' ],
                     }
 
     }
