@@ -44,6 +44,12 @@ class Book(models.Model):
 
     images = GenericRelation('Image')
     tags = GenericRelation('blog.Taggable')
+    
+    @property
+    def getImageUrl(self):
+        if self.image:
+            return self.image.url
+        return None
 
     def __str__(self):
         return self.title
