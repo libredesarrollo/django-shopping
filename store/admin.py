@@ -10,7 +10,7 @@ class BookForm(forms.ModelForm):
     class Meta:
         model = Book
         # fields = ('title','slug','category', 'path','content','description','posted','language','date')
-        fields = ('title','subtitle','slug','post', 'path','content','description','posted', 'date','image', 'user', 'price_offert', 'price')
+        fields = ('title','subtitle','slug','post', 'path','content','description','posted', 'date','image', 'user', 'price_offert', 'price', 'page')
         widgets = {
             'description': forms.Textarea(attrs={'rows': 10, 'cols': 80}),
         }

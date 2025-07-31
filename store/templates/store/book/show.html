@@ -1,34 +1,47 @@
 {% extends "master.html" %}
 
 {% block content %}
-    <div>
-        <section class="card mx-auto mb-3 prose-lg">
-            <div class="card-body">
-                <h1 class="text-center">{{ book.title }}</h1>
+    <div class="post prose-lg mb-3">
+        
+        <h1 class="text-center !mb-0">{{ book.title }}</h1>
+        <p class="text-center text-xl !text-gray-400">{{ book.subtitle }}</p>
 
-                {% if book.image %}
-                    <img class="post" alt="{{ book.title }}" title="{{ book.title }}" src="{{ book.getImageUrl }}" />
-                {% endif %}
-
-                <p class="my-0 ml-2">
-                    <span class="text-center ml-4 mb-3 text-sm block text-gray-500 italic font-bold uppercase tracking-widest">
-                        {{ book.date }}
-                    </span>
-
-                    <a class="btn-sm btn-success" target="_blank"  href="{% url 'b.index' %}?category_id={{ book.post.category.id }}">
-                        {{ book.post.category.title }}
-                    </a>
-
-                    {% for t in book.tags.all %}
-                        <a class="btn-sm btn-success-border" target="_blank" href="{% url 'b.index' %}?tag_id={{ t.id }}">
-                            {{ t.tag.title }}
-                        </a>
-                    {% endfor %}
+        <div class="sm:grid grid-cols-[1fr_2fr] gap-7">
+            {% if book.image %}
+                <img class="post" alt="{{ book.title }}" title="{{ book.title }}" src="{{ book.getImageUrl }}" />
+            {% endif %}
+            <div>
+            
+                <p class="my-0 mb-3 text-sm block text-gray-500 italic font-bold uppercase tracking-widest">
+                    {{ book.date }}
+                </p>
+                <p class="my-0 mb-3 text-sm block italic font-bold tracking-widest">
+                    {{ _('Pages') }}:{{ book.page }}
                 </p>
 
-                <div class="post mt-4">
-                    {{ book.content|safe }}
-                </div>
+                <p class="font-bold text-green-700">
+                    {{ book.price_offert }}$
+                </p>
+
+                {% comment %} data {% endcomment %}
+                <a class="btn-sm btn-success" target="_blank"  href="{% url 'b.index' %}?category_id={{ book.post.category.id }}">
+                    {{ book.post.category.title }}
+                </a>
+
+                {% for t in book.tags.all %}
+                    <a class="btn-sm btn-success-border" target="_blank" href="{% url 'b.index' %}?tag_id={{ t.id }}">
+                        {{ t.tag.title }}
+                    </a>
+                {% endfor %}
+                {% comment %} data {% endcomment %}
+            </div>
+        </div>
+
+
+        <hr class="my-3 dark:text-white">
+        <section class="mycard mx-auto">
+            <div class="mycard-body">
+                {{ book.content|safe }}
             </div>
         </section>
     </div>
