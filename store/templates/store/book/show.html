@@ -15,8 +15,8 @@
                         {{ book.date }}
                     </span>
 
-                    <a class="btn-sm btn-success" target="_blank"  href="{% url 'b.index' %}?category_id={{ book.category.id }}">
-                        {{ book.category.title }}
+                    <a class="btn-sm btn-success" target="_blank"  href="{% url 'b.index' %}?category_id={{ book.post.category.id }}">
+                        {{ book.post.category.title }}
                     </a>
 
                     {% for t in book.tags.all %}
