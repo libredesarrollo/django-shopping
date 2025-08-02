@@ -3,6 +3,8 @@ from django.views.generic import ListView, DetailView
 from django.db.models import Q
 from django.utils.dateparse import parse_date
 
+from django.conf import settings
+
 from blog.models import Category, Tag
 from .models import Book
 
@@ -52,6 +54,7 @@ class BookIndex(ListView):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
         context['tags'] = Tag.objects.all()
+        context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID
         
         return context
     
@@ -60,4 +63,9 @@ class BookShow(DetailView):
     context_object_name='book'
     template_name='store/book/show.html'
     slug_field = 'slug'            
-    slug_url_kwarg = 'slug'        
+    slug_url_kwarg = 'slug'   
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID     
+        return context

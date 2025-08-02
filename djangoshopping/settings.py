@@ -70,6 +70,10 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
 # CKEDITOR
 
+#PayPal
+PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID', '<YOUR_PRO_PAYPAL_CLIENT_ID>')
+PAYPAL_SECRET = os.environ.get('PAYPAL_SECRET', '<YOUR_PRO_PAYPAL_SECRET>')
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

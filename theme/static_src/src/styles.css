@@ -203,3 +203,14 @@ div.post img {
   height: 100%;
 }
 /* youtube */
+
+.prose-lg h1,
+.prose-lg h2,
+.prose-lg h3,
+.prose-lg h4,
+.prose-lg h5,
+.prose-lg h6,
+.prose-lg p, 
+.prose-lg li {
+	@apply dark:text-white
+}

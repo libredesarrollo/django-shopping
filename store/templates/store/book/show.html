@@ -34,6 +34,11 @@
                     </a>
                 {% endfor %}
                 {% comment %} data {% endcomment %}
+
+                {% comment %} payment {% endcomment %}
+                 {% include "fragment/_paypal.html" with paypal_client_id=paypal_client_id  %}
+                {% comment %} payment {% endcomment %}
+
             </div>
         </div>
 
