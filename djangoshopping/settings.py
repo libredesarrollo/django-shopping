@@ -28,6 +28,8 @@ SECRET_KEY = 'django-insecure-6)c9xu_htu$i75jwil1i^=stjyl69s4=szlor0c#6hs#o33w4w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+PAYPAL_PRODUCTION = os.environ.get('PAYPAL_PRODUCTION', True)
+
 ALLOWED_HOSTS = []
 
 

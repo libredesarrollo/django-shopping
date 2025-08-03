@@ -1,6 +1,7 @@
 <script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}"></script>
 
 <div id="paypalButtons"></div>
+{{ price }}
 <script>
     paypal.Buttons({
         createOrder: function(data, actions){
@@ -8,7 +9,7 @@
                 purchase_units:[
                     {
                         amount: {
-                            value:50
+                            value:{{ price }}
                         }
                     }
                 ]
