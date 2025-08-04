@@ -6,7 +6,7 @@ class PaymentPaypalClient:
         env = settings.PAYPAL_PRODUCTION
         self.base_url = (
             'https://api-m.sandbox.paypal.com'
-            if env == 'local'
+            if env
             else 'https://api-m.paypal.com'
         )
         self.client_id = settings.PAYPAL_CLIENT_ID
