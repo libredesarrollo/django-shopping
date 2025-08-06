@@ -16,9 +16,23 @@
             })
         },
         onApprove: function(data, actions){
-            // TODO send order to server
-            console.log(data.orderID)
-            axios.post('paypal-process-order/'+data.orderID)
+ 
+            const csrfToken = '{{ csrf_token }}';
+            fetch(`/store/payment/${data.orderID}/2/`, {
+                method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    // Redirect to success page or show success message
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
         }
     }).render("#paypalButtons");
 </script>
