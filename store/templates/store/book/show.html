@@ -36,7 +36,7 @@
                 {% comment %} data {% endcomment %}
 
                 {% comment %} payment {% endcomment %}
-                 {% include "fragment/_paypal.html" with paypal_client_id=paypal_client_id price=book.price_offert %}
+                 {% include "fragment/_paypal.html" with paypal_client_id=paypal_client_id price=book.price_offert id=book.id %}
                 {% comment %} payment {% endcomment %}
 
             </div>

@@ -1,17 +1,16 @@
 from django.views.generic import ListView, DetailView
+from django.conf import settings
+from django.views import View
+from django.http import JsonResponse
 
 from django.db.models import Q
 from django.utils.dateparse import parse_date
 
-from django.conf import settings
-import requests
-
 from blog.models import Category, Tag
-from .models import Book
+from .models import Book, Payment
+from .utils.paypal import PaymentPaypalClient
 
-from django.views import View
-
-from django.http import JsonResponse
+from django.contrib.contenttypes.models import ContentType
 
 # Create your views here.
 class BookIndex(ListView):
@@ -76,7 +75,7 @@ class BookShow(DetailView):
         return context
     
 # PAYPAL
-class PaymentView(View):
+class PaymentView(View, PaymentPaypalClient):
    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -91,45 +90,85 @@ class PaymentView(View):
         self.secret = settings.PAYPAL_SECRET
 
     def post(self, request, order_id, book_id):
-       return JsonResponse(self.process_order(order_id))
-
-    def process_order(self, order_id):   
+        response = self.process_order(order_id)
+        
         try:
-            access_token = self.get_access_token()
-            print(f"Access Token: {access_token}")
-            headers = {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {access_token}"
-            }
-            payload = {
-                "application_context": {
-                    "return_url": "http://djangoshopping.test/paypal",
-                    "cancel_url": "http://djangoshopping.test/paypal/cancel"
-                }
-                # "application_context": {
-                #     "return_url": "<URL-RETURN>",
-                #     "cancel_url": "<URL-CANCEL>"
-                # }
-            }
-            response = requests.post(
-                f"{self.base_url}/v2/checkout/orders/{order_id}/capture",
-                headers=headers,
-                json=payload
+            book = Book.objects.get(id=book_id)
+        except Book.DoesNotExist:
+            return JsonResponse({"error": _("Not Book Found")}, status=404)
+        
+        user = request.user 
+        
+        if self.status == "COMPLETED":
+            payment = Payment.objects.create(
+                user=user,
+                type=self.type,  
+                coupon=None,  
+                orderId=order_id,
+                price=self.price,
+                trace=self.trace,  
+                content_type=ContentType.objects.get_for_model(book),
+                object_id=book.id
             )
-            return response.json()
-        except Exception as e:
-            return {"error": str(e)}
+        
+        return JsonResponse(response)
 
-    def get_access_token(self):
-        url = f"{self.base_url}/v1/oauth2/token"
-        auth = (self.client_id, self.secret)
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded"
-        }
-        data = {
-            "grant_type": "client_credentials"
-        }
-        response = requests.post(url, headers=headers, auth=auth, data=data)
-        response.raise_for_status()
-        return response.json().get("access_token")
+
+    
+# class PaymentView(View):
+   
+#     def __init__(self, **kwargs):
+#         super().__init__(**kwargs)
+        
+#         env = settings.PAYPAL_PRODUCTION
+#         self.base_url = (
+#             'https://api-m.sandbox.paypal.com'
+#             if env
+#             else 'https://api-m.paypal.com'
+#         )
+#         self.client_id = settings.PAYPAL_CLIENT_ID
+#         self.secret = settings.PAYPAL_SECRET
+
+#     def post(self, request, order_id, book_id):
+#        return JsonResponse(self.process_order(order_id))
+
+#     def process_order(self, order_id):   
+#         try:
+#             access_token = self.get_access_token()
+#             print(f"Access Token: {access_token}")
+#             headers = {
+#                 "Content-Type": "application/json",
+#                 "Authorization": f"Bearer {access_token}"
+#             }
+#             payload = {
+#                 "application_context": {
+#                     "return_url": "http://djangoshopping.test/paypal",
+#                     "cancel_url": "http://djangoshopping.test/paypal/cancel"
+#                 }
+#                 # "application_context": {
+#                 #     "return_url": "<URL-RETURN>",
+#                 #     "cancel_url": "<URL-CANCEL>"
+#                 # }
+#             }
+#             response = requests.post(
+#                 f"{self.base_url}/v2/checkout/orders/{order_id}/capture",
+#                 headers=headers,
+#                 json=payload
+#             )
+#             return response.json()
+#         except Exception as e:
+#             return {"error": str(e)}
+
+#     def get_access_token(self):
+#         url = f"{self.base_url}/v1/oauth2/token"
+#         auth = (self.client_id, self.secret)
+#         headers = {
+#             "Accept": "application/json",
+#             "Content-Type": "application/x-www-form-urlencoded"
+#         }
+#         data = {
+#             "grant_type": "client_credentials"
+#         }
+#         response = requests.post(url, headers=headers, auth=auth, data=data)
+#         response.raise_for_status()
+#         return response.json().get("access_token")

@@ -18,7 +18,7 @@
         onApprove: function(data, actions){
  
             const csrfToken = '{{ csrf_token }}';
-            fetch(`/store/payment/${data.orderID}/2/`, {
+            fetch(`/store/payment/${data.orderID}/{{id}}/`, {
                 method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
