@@ -5,10 +5,12 @@ from django.http import JsonResponse
 
 from django.db.models import Q
 from django.utils.dateparse import parse_date
+from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from blog.models import Category, Tag
 from .models import Book, Payment
-from .utils.paypal import PaymentPaypalClient
+from .utils.payment import BasePayment
 
 from django.contrib.contenttypes.models import ContentType
 
@@ -74,8 +76,8 @@ class BookShow(DetailView):
         context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID     
         return context
     
-# PAYPAL
-class PaymentView(View, PaymentPaypalClient):
+# BOOK BUY
+class PaymentBookView(LoginRequiredMixin, View, BasePayment):
    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -89,17 +91,22 @@ class PaymentView(View, PaymentPaypalClient):
         self.client_id = settings.PAYPAL_CLIENT_ID
         self.secret = settings.PAYPAL_SECRET
 
-    def post(self, request, order_id, book_id):
-        response = self.process_order(order_id)
+    def post(self, request, order_id:str, book_id:int, type:str):
+
+        # procesamos la orden
+        response = self.process_order(order_id, type)
         
+        # buscamos el producto
         try:
             book = Book.objects.get(id=book_id)
         except Book.DoesNotExist:
             return JsonResponse({"error": _("Not Book Found")}, status=404)
         
+        #usuario auth
         user = request.user 
         
-        if self.status == "COMPLETED":
+        # creamos el producto si todo esta ok
+        if response == True:
             payment = Payment.objects.create(
                 user=user,
                 type=self.type,  
@@ -111,7 +118,7 @@ class PaymentView(View, PaymentPaypalClient):
                 object_id=book.id
             )
         
-        return JsonResponse(response)
+        return JsonResponse({"status": "ok"})
 
 
     

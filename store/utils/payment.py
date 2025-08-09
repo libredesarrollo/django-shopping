@@ -1,3 +1,4 @@
+
 from django.conf import settings
 
 import requests
@@ -17,7 +18,7 @@ class PaymentPaypalClient:
     def __str__(self):
         return f"PayPalClient(base_url={self.base_url}, client_id={self.client_id})"
     
-    def process_order(self, order_id):   
+    def process_order_paypal(self, order_id:str) -> bool:   
         try:
             access_token = self.get_access_token()
             
@@ -50,11 +51,12 @@ class PaymentPaypalClient:
                 self.trace = data
                 self.price = data.get("purchase_units", [{}])[0].get("payments", {}).get("captures", [{}])[0].get("amount", {}).get("value")
             
-            return response.json()
+            return True
         except Exception as e:
-            return {"error": str(e)}
+            return False
+            # return {"error": str(e)}
 
-    def get_access_token(self):
+    def get_access_token(self) -> str:
         url = f"{self.base_url}/v1/oauth2/token"
         auth = (self.client_id, self.secret)
         
@@ -71,3 +73,18 @@ class PaymentPaypalClient:
         response.raise_for_status()
         
         return response.json().get("access_token")
+    
+class BasePayment(PaymentPaypalClient):
+    def process_order(self, order_id:str, type:str) -> bool:
+
+        #TODO revisar que NO compre el mismo producto 2 veces
+
+        if type == 'paypal':
+            # Paypal
+            self.process_order_paypal(order_id)
+        elif type == 'stripe':
+            # Stripe
+            # self.stripe_check_payment(orderId)
+            pass
+        
+        return True

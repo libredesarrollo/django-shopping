@@ -35,13 +35,15 @@
                 {% endfor %}
                 {% comment %} data {% endcomment %}
 
+                {% if user.is_authenticated %}
                 {% comment %} payment {% endcomment %}
-                 {% include "fragment/_paypal.html" with paypal_client_id=paypal_client_id price=book.price_offert id=book.id %}
+                    {% include "fragment/_paypal.html" with paypal_client_id=paypal_client_id price=book.price_offert id=book.id %}
                 {% comment %} payment {% endcomment %}
-
+                {% else %}
+                    {% include "fragment/_need_login.html" %}
+                {% endif %}
             </div>
         </div>
-
 
         <hr class="my-3 dark:text-white">
         <section class="mycard mx-auto">

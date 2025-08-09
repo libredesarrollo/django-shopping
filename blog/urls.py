@@ -7,6 +7,4 @@ urlpatterns = [
     path('sitemap.xml', PostSitemap.as_view(), name='b.sitemap'),
     # path('<int:pk>', PostShow.as_view() )
     path('<slug:slug>', PostShow.as_view(), name='b.show'),
-
- 
 ]
