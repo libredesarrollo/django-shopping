@@ -79,19 +79,9 @@ class BookShow(DetailView):
 # BOOK BUY
 class PaymentBookView(LoginRequiredMixin, View, BasePayment):
    
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        
-        env = settings.PAYPAL_PRODUCTION
-        self.base_url = (
-            'https://api-m.sandbox.paypal.com'
-            if env
-            else 'https://api-m.paypal.com'
-        )
-        self.client_id = settings.PAYPAL_CLIENT_ID
-        self.secret = settings.PAYPAL_SECRET
-
     def post(self, request, order_id:str, book_id:int, type:str):
+
+        #TODO revisar que NO compre el mismo producto 2 veces
 
         # procesamos la orden
         response = self.process_order(order_id, type)

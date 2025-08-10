@@ -77,7 +77,7 @@ class PaymentPaypalClient:
 class BasePayment(PaymentPaypalClient):
     def process_order(self, order_id:str, type:str) -> bool:
 
-        #TODO revisar que NO compre el mismo producto 2 veces
+       
 
         if type == 'paypal':
             # Paypal
