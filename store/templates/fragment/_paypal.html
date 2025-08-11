@@ -3,6 +3,8 @@
 <div id="paypalButtons"></div>
 
 <script>
+
+
     paypal.Buttons({
         createOrder: function(data, actions){
             return actions.order.create({
@@ -18,7 +20,8 @@
         onApprove: function(data, actions){
  
             const csrfToken = '{{ csrf_token }}';
-            fetch(`/store/payment/${data.orderID}/{{id}}/paypal`, {
+            // fetch(`/store/payment/${data.orderID}/{{id}}/paypal`, {
+            fetch(`{{url}}`.replace('orderID', data.orderID), {
                 method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
