@@ -76,6 +76,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
 PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID', '<YOUR_PRO_PAYPAL_CLIENT_ID>')
 PAYPAL_SECRET = os.environ.get('PAYPAL_SECRET', '<YOUR_PRO_PAYPAL_SECRET>')
 
+#Stripe
+STRIPE_KEY = os.environ.get('STRIPE_KEY', '<YOUR_PRO_STRIPE_KEY>')
+STRIPE_SECRET = os.environ.get('STRIPE_SECRET', '<YOUR_PRO_STRIPE_SECRET>')
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
