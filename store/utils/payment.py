@@ -77,8 +77,6 @@ class PaymentPaypalClient:
 class BasePayment(PaymentPaypalClient):
     def process_order(self, order_id:str, type:str) -> bool:
 
-       
-
         if type == 'paypal':
             # Paypal
             self.process_order_paypal(order_id)

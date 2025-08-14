@@ -9,6 +9,8 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 
+from decimal import Decimal
+
 import stripe
 
 from blog.models import Category, Tag
@@ -79,6 +81,7 @@ class BookShow(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID     
+        context['stripe_key'] = settings.STRIPE_KEY     
         return context
     
 # BOOK BUY
@@ -116,8 +119,18 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
         return JsonResponse({"status": "ok"})
 
 
+
 @csrf_exempt
 def create_checkout_session(request):
+
+    entity = request.POST.get('entity', '')
+    id = request.POST.get('id', '')
+    
+    if entity == 'book':
+        try:
+            product = Book.objects.get(id=id)
+        except Book.DoesNotExist:
+            return JsonResponse({'error': 'Libro no encontradowww'}, status=404)
     try:
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -126,9 +139,9 @@ def create_checkout_session(request):
                     'price_data': {
                         'currency': 'usd',
                         'product_data': {
-                            'name': 'Producto de prueba',
+                            'name': product.title,
                         },
-                        'unit_amount': 2000,  # en centavos, $20.00
+                        'unit_amount': int(Decimal(product.price) * 100),  # en centavos
                     },
                     'quantity': 1,
                 },
