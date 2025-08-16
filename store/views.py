@@ -13,6 +13,8 @@ from decimal import Decimal
 
 import stripe
 
+import json
+
 from blog.models import Category, Tag
 from .models import Book, Payment
 from .utils.payment import BasePayment
@@ -130,7 +132,7 @@ def create_checkout_session(request):
         try:
             product = Book.objects.get(id=id)
         except Book.DoesNotExist:
-            return JsonResponse({'error': 'Libro no encontradowww'}, status=404)
+            return JsonResponse({'error': 'Libro no encontrado'}, status=404)
     try:
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -141,15 +143,36 @@ def create_checkout_session(request):
                         'product_data': {
                             'name': product.title,
                         },
-                        'unit_amount': int(Decimal(product.price) * 100),  # en centavos
+                        'unit_amount': int(Decimal(product.price_offert) * 100),  # en centavos
                     },
                     'quantity': 1,
                 },
             ],
             mode='payment',
-            success_url='http://localhost:8000/success',
+            success_url='http://localhost:8000/success?order_id={CHECKOUT_SESSION_ID}',
             cancel_url='http://localhost:8000/cancel',
         )
         return JsonResponse({'id': checkout_session.id})
     except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+    
+    
+def check_payment(request,session_id):
+    try:
+        # Obtener la sesión de Stripe
+        session = stripe.checkout.Session.retrieve(session_id)
+        print(session.payment_status)
+        # Revisar si el pago está completo
+        if session.payment_status == 'paid':
+            result = {
+                'status': 'COMPLETED',
+                'idAPI': session_id,
+                'responseAPI': json.dumps(dict(session)),  # Convierte objeto a dict
+                # 'responseAPI': json.loads(json.dumps(dict(session))),  # Convierte a dict para JSON
+                'payment': 'stripe',
+                'price': session.amount_total // 100  # Convertir de centavos a unidad
+            }
+
+        return JsonResponse(result)
+    except stripe.error.StripeError as e:
         return JsonResponse({'error': str(e)}, status=400)

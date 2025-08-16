@@ -1,9 +1,18 @@
 </script>
 <script src="https://js.stripe.com/v3/"></script>
-<button id="payStripe" class='btn btn-success'>Stripe</button>
+<button id="payStripe" class='btn btn-success'>Stripe</button> 
 <script>
 const stripe = Stripe("{{ stripe_key }}");
+// let click = false;
 document.getElementById("payStripe").addEventListener("click", function () {
+    
+   /* if(click){
+        return;
+    }*/
+    document.getElementById("payStripe").disabled = true;
+    
+    //click = true;
+    
     const formData = new FormData();
     formData.append('entity', '{{ entity }}');
     formData.append('id', {{ id }});
@@ -17,6 +26,10 @@ document.getElementById("payStripe").addEventListener("click", function () {
         'id':{{id}},
     })*/
         .then(response => response.json())
+        /*.then(function (response) {
+            click=false
+            return response.json();
+        })*/
         .then(session => stripe.redirectToCheckout({ sessionId: session.id }))
         .catch(error => console.error("Error:", error));
 });

@@ -1,0 +1,2 @@
+{% include "fragment/payment/_paypal.html" with paypal_client_id=paypal_client_id price=book.price_offert id=book.id url=payment_url %}
+{% include "fragment/payment/_stripe.html" with stripe_key=stripe_key entity='book' id=book.id %}
