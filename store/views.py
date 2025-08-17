@@ -104,7 +104,7 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
         
         #usuario auth
         user = request.user 
-        
+
         # creamos el producto si todo esta ok
         if response == True:
             payment = Payment.objects.create(
@@ -161,7 +161,6 @@ def check_payment(request,session_id):
     try:
         # Obtener la sesión de Stripe
         session = stripe.checkout.Session.retrieve(session_id)
-        print(session.payment_status)
         # Revisar si el pago está completo
         if session.payment_status == 'paid':
             result = {
@@ -176,3 +175,60 @@ def check_payment(request,session_id):
         return JsonResponse(result)
     except stripe.error.StripeError as e:
         return JsonResponse({'error': str(e)}, status=400)
+
+
+
+# class CreateCheckoutSessionView(View):
+#     def get(self, request, session_id, *args, **kwargs):
+#         try:
+#             # Obtener la sesión de Stripe
+#             session = stripe.checkout.Session.retrieve(session_id)
+
+#             if session.payment_status == 'paid':
+#                 result = {
+#                     'status': 'COMPLETED',
+#                     'idAPI': session_id,
+#                     'responseAPI': json.dumps(dict(session)),
+#                     'payment': 'stripe',
+#                     'price': session.amount_total // 100
+#                 }
+#                 return JsonResponse(result)
+
+#             return JsonResponse({'status': session.payment_status})
+#         except stripe.error.StripeError as e:
+#             return JsonResponse({'error': str(e)}, status=400)
+        
+#     def post(self, request, *args, **kwargs):
+#         entity = request.POST.get('entity', '')
+#         entity_id = request.POST.get('id', '')
+
+#         product = None
+#         if entity == 'book':
+#             try:
+#                 product = Book.objects.get(id=entity_id)
+#             except Book.DoesNotExist:
+#                 return JsonResponse({'error': 'Libro no encontrado'}, status=404)
+
+#         try:
+#             checkout_session = stripe.checkout.Session.create(
+#                 payment_method_types=['card'],
+#                 line_items=[
+#                     {
+#                         'price_data': {
+#                             'currency': 'usd',
+#                             'product_data': {
+#                                 'name': product.title,
+#                             },
+#                             'unit_amount': int(Decimal(product.price_offert) * 100),  # en centavos
+#                         },
+#                         'quantity': 1,
+#                     },
+#                 ],
+#                 mode='payment',
+#                 success_url='http://localhost:8000/success?order_id={CHECKOUT_SESSION_ID}',
+#                 cancel_url='http://localhost:8000/cancel',
+#             )
+#             return JsonResponse({'id': checkout_session.id})
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=400)
+
