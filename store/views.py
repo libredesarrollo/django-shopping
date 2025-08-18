@@ -121,40 +121,53 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
         return JsonResponse({"status": "ok"})
 
 
+# STRIPE
+class StripeView(LoginRequiredMixin, View, BasePayment):
+    def post(self, request):
+        entity = request.POST.get('entity', '')
+        id = request.POST.get('id', '')
+        
+        if entity == 'book':
+            try:
+                product = Book.objects.get(id=id)
+            except Book.DoesNotExist:
+                return JsonResponse({'error': 'Libro no encontrado'}, status=404)
+            
+        return JsonResponse({'id': self.generate_session_id(product.title, product.price, 'http://localhost:8000/success?order_id={CHECKOUT_SESSION_ID}')})
 
-@csrf_exempt
-def create_checkout_session(request):
+# @csrf_exempt
+# def create_checkout_session(request):
 
-    entity = request.POST.get('entity', '')
-    id = request.POST.get('id', '')
+#     entity = request.POST.get('entity', '')
+#     id = request.POST.get('id', '')
     
-    if entity == 'book':
-        try:
-            product = Book.objects.get(id=id)
-        except Book.DoesNotExist:
-            return JsonResponse({'error': 'Libro no encontrado'}, status=404)
-    try:
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[
-                {
-                    'price_data': {
-                        'currency': 'usd',
-                        'product_data': {
-                            'name': product.title,
-                        },
-                        'unit_amount': int(Decimal(product.price_offert) * 100),  # en centavos
-                    },
-                    'quantity': 1,
-                },
-            ],
-            mode='payment',
-            success_url='http://localhost:8000/success?order_id={CHECKOUT_SESSION_ID}',
-            cancel_url='http://localhost:8000/cancel',
-        )
-        return JsonResponse({'id': checkout_session.id})
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=400)
+#     if entity == 'book':
+#         try:
+#             product = Book.objects.get(id=id)
+#         except Book.DoesNotExist:
+#             return JsonResponse({'error': 'Libro no encontrado'}, status=404)
+#     try:
+#         checkout_session = stripe.checkout.Session.create(
+#             payment_method_types=['card'],
+#             line_items=[
+#                 {
+#                     'price_data': {
+#                         'currency': 'usd',
+#                         'product_data': {
+#                             'name': product.title,
+#                         },
+#                         'unit_amount': int(Decimal(product.price_offert) * 100),  # en centavos
+#                     },
+#                     'quantity': 1,
+#                 },
+#             ],
+#             mode='payment',
+#             success_url='http://localhost:8000/success?order_id={CHECKOUT_SESSION_ID}',
+#             cancel_url='http://localhost:8000/cancel',
+#         )
+#         return JsonResponse({'id': checkout_session.id})
+#     except Exception as e:
+#         return JsonResponse({'error': str(e)}, status=400)
     
     
 def check_payment(request,session_id):

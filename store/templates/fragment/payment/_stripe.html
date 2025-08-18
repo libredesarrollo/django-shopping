@@ -14,10 +14,14 @@ document.getElementById("payStripe").addEventListener("click", function () {
     //click = true;
     
     const formData = new FormData();
+    const csrfToken = '{{ csrf_token }}';
     formData.append('entity', '{{ entity }}');
     formData.append('id', {{ id }});
 
     fetch("{% url 's.create_checkout_session' %}", {
+        headers: {
+                    'X-CSRFToken': csrfToken
+                },
         method: "POST",
         body: formData,
     })

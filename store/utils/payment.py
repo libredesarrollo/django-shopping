@@ -152,7 +152,7 @@ class PaymentStripeClient(AbstractPayment):
 
 
 # Capa 2    
-class BasePayment(PaymentPaypalClient):
+class BasePayment(PaymentPaypalClient, PaymentStripeClient):
     def process_order(self, order_id:str, type:str) -> bool:
 
         if type == 'paypal':
@@ -160,7 +160,6 @@ class BasePayment(PaymentPaypalClient):
             self.process_order_paypal(order_id)
         elif type == 'stripe':
             # Stripe
-            # self.stripe_check_payment(orderId)
-            pass
+            self.check_order_stripe(order_id)
         
         return True
