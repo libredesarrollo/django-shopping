@@ -22,7 +22,7 @@
  
             const csrfToken = '{{ csrf_token }}';
             // fetch(`/store/payment/${data.orderID}/{{id}}/paypal`, {
-            fetch(`{{url}}`.replace('orderID', data.orderID), {
+            fetch(`{{payment_url_paypal}}`.replace('orderID', data.orderID), {
                 method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

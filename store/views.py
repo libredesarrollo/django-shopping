@@ -7,7 +7,6 @@ from django.db.models import Q
 from django.utils.dateparse import parse_date
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.decorators.csrf import csrf_exempt
 
 from decimal import Decimal
 
@@ -89,21 +88,36 @@ class BookShow(DetailView):
 # BOOK BUY
 class PaymentBookView(LoginRequiredMixin, View, BasePayment):
    
+    def get(self, request, order_id:str, book_id:int, type:str):
+        self.process(request, order_id, book_id, type)
+        return JsonResponse({"status": "ok"})
+    
     def post(self, request, order_id:str, book_id:int, type:str):
-
+        self.process(request, order_id, book_id, type)
+        return JsonResponse({"status": "ok"})
+    
+    def process(self, request, order_id:str, book_id:int, type:str):
         #TODO revisar que NO compre el mismo producto 2 veces
-
+     
+        # si la ordenID en la URL no es valida, lo busca en el request, caso Stripe   
+        # http://127.0.0.1:8000/store/payment/orderID/2/stripe?order_id=cs_test_a***pR
+        if order_id == 'orderID':
+            order_id = request.GET.get('order_id', '')
+            if not order_id:
+                return JsonResponse({"error": _("Not Order Found")}, status=404)
+            
+     
         # procesamos la orden
         response = self.process_order(order_id, type)
+        
+        #usuario auth
+        user = request.user 
         
         # buscamos el producto
         try:
             book = Book.objects.get(id=book_id)
         except Book.DoesNotExist:
             return JsonResponse({"error": _("Not Book Found")}, status=404)
-        
-        #usuario auth
-        user = request.user 
 
         # creamos el producto si todo esta ok
         if response == True:
@@ -126,6 +140,7 @@ class StripeView(LoginRequiredMixin, View, BasePayment):
     def post(self, request):
         entity = request.POST.get('entity', '')
         id = request.POST.get('id', '')
+        payment_url = request.POST.get('url', '')
         
         if entity == 'book':
             try:
@@ -133,7 +148,7 @@ class StripeView(LoginRequiredMixin, View, BasePayment):
             except Book.DoesNotExist:
                 return JsonResponse({'error': 'Libro no encontrado'}, status=404)
             
-        return JsonResponse({'id': self.generate_session_id(product.title, product.price, 'http://localhost:8000/success?order_id={CHECKOUT_SESSION_ID}')})
+        return JsonResponse({'id': self.generate_session_id(product.title, product.price, payment_url +'?order_id={CHECKOUT_SESSION_ID}')})
 
 # @csrf_exempt
 # def create_checkout_session(request):

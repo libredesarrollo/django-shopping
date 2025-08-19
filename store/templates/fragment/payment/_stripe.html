@@ -12,11 +12,11 @@ document.getElementById("payStripe").addEventListener("click", function () {
     document.getElementById("payStripe").disabled = true;
     
     //click = true;
-    
     const formData = new FormData();
     const csrfToken = '{{ csrf_token }}';
     formData.append('entity', '{{ entity }}');
     formData.append('id', {{ id }});
+    formData.append('url', window.location.origin + '{{ payment_url_stripe }}');
 
     fetch("{% url 's.create_checkout_session' %}", {
         headers: {

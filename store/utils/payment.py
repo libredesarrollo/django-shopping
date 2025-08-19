@@ -139,11 +139,16 @@ class PaymentStripeClient(AbstractPayment):
             session = stripe.checkout.Session.retrieve(session_id)
 
             if session.payment_status == 'paid':
-                self.status = 'COMPLETED',
-                self.idAPI = session_id,
-                self.type = 'stripe',
-                self.trace = json.dumps(dict(session)),
+                self.status = 'COMPLETED'
+                self.idAPI = session_id
+                self.type = 'stripe'
+                self.trace = json.dumps(dict(session))
                 self.price = session.amount_total // 100
+                # self.status = 'COMPLETED',
+                # self.idAPI = session_id,
+                # self.type = 'stripe',
+                # self.trace = json.dumps(dict(session)),
+                # self.price = session.amount_total // 100
 
         except stripe.error.StripeError as e:
             pass #str(e)
