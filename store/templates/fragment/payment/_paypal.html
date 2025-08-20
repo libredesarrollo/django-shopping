@@ -30,8 +30,8 @@
                     },
                 })
                 .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
+                .then(response => {
+                    window.location.href = response.data.redirect;
                     // Redirect to success page or show success message
                 })
                 .catch((error) => {

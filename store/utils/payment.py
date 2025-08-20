@@ -152,11 +152,8 @@ class PaymentStripeClient(AbstractPayment):
 
         except stripe.error.StripeError as e:
             pass #str(e)
-        
-    
 
-
-# Capa 2    
+# Capa 2 - Control de Pasarelas de pago
 class BasePayment(PaymentPaypalClient, PaymentStripeClient):
     def process_order(self, order_id:str, type:str) -> bool:
 
@@ -168,3 +165,5 @@ class BasePayment(PaymentPaypalClient, PaymentStripeClient):
             self.check_order_stripe(order_id)
         
         return True
+
+

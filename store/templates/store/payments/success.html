@@ -1,0 +1,41 @@
+{% extends "master.html" %}
+
+{% block content %}
+<div class="post prose-lg">
+    <div class="sm:grid grid-cols-[1fr_2fr] gap-7">
+
+        {% if payment.paymentable.image %}
+            <img class="post" alt="{{ payment.paymentable.title }}" title="{{ payment.paymentable.title }}" src="{{ payment.paymentable.getImageUrl }}">
+        {% endif %}
+        <div>
+            <h1 class="mb-2 md:mt-30">
+                <span class="italic">{{ _("Thank you for purchasing") }}:</span> {{ payment.paymentable.title }}
+            </h1>
+
+            <div class="mx-5">
+                <p class="mb-0">{{ _("You can download from") }}:</p>
+                <a class="ml-4 btn-sm btn-success" href="#">
+                    {{ _("Download") }}
+                </a>
+            </div>
+
+            <hr class="dark:text-white">
+
+            {# payments #}
+            <div class="mx-8">
+                <h2 class="mt-0!">
+                    <span class="italic">{{ _("Purchase information") }}</span> {{ payment.paymentable.title }}
+                </h2>
+                <ul>
+                    <li>
+                        <span class="text-2xl!">{{ _("Payment Id") }}:</span> {{ payment.orderId }}
+                    </li>
+                    <li>
+                        <span class="text-2xl!">{{ _("Type") }}:</span> {{ payment.type }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

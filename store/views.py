@@ -2,13 +2,15 @@ from django.views.generic import ListView, DetailView
 from django.conf import settings
 from django.views import View
 from django.http import JsonResponse
+from django.shortcuts import redirect, get_object_or_404
 
 from django.db.models import Q
 from django.utils.dateparse import parse_date
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from decimal import Decimal
+from django.shortcuts import render
+from django.urls import reverse
 
 import stripe
 
@@ -22,7 +24,7 @@ from django.contrib.contenttypes.models import ContentType
 
 stripe.api_key = settings.STRIPE_SECRET
 
-# Create your views here.
+# Listado de libros
 class BookIndex(ListView):
     model = Book
     context_object_name = 'books'
@@ -72,6 +74,7 @@ class BookIndex(ListView):
         
         return context
     
+# Detalle del pago    
 class BookShow(DetailView):
     model=Book
     context_object_name='book'
@@ -85,16 +88,14 @@ class BookShow(DetailView):
         context['stripe_key'] = settings.STRIPE_KEY     
         return context
     
-# BOOK BUY
+# Procesa la compra de un Producto/Libro
 class PaymentBookView(LoginRequiredMixin, View, BasePayment):
    
     def get(self, request, order_id:str, book_id:int, type:str):
-        self.process(request, order_id, book_id, type)
-        return JsonResponse({"status": "ok"})
+        return self.process(request, order_id, book_id, type)
     
     def post(self, request, order_id:str, book_id:int, type:str):
-        self.process(request, order_id, book_id, type)
-        return JsonResponse({"status": "ok"})
+        return self.process(request, order_id, book_id, type) 
     
     def process(self, request, order_id:str, book_id:int, type:str):
         #TODO revisar que NO compre el mismo producto 2 veces
@@ -105,7 +106,6 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
             order_id = request.GET.get('order_id', '')
             if not order_id:
                 return JsonResponse({"error": _("Not Order Found")}, status=404)
-            
      
         # procesamos la orden
         response = self.process_order(order_id, type)
@@ -131,11 +131,13 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
                 content_type=ContentType.objects.get_for_model(book),
                 object_id=book.id
             )
+            
+        if request.headers.get("Content-Type") == "application/json":
+            return JsonResponse({"'redirect' ": reverse("s.payment.success", kwargs={"payment_id": payment.id})}, status=404)
         
-        return JsonResponse({"status": "ok"})
+        return  redirect("s.payment.success", payment_id=payment.id)
 
-
-# STRIPE
+# STRIPE Helper View
 class StripeView(LoginRequiredMixin, View, BasePayment):
     def post(self, request):
         entity = request.POST.get('entity', '')
@@ -149,6 +151,14 @@ class StripeView(LoginRequiredMixin, View, BasePayment):
                 return JsonResponse({'error': 'Libro no encontrado'}, status=404)
             
         return JsonResponse({'id': self.generate_session_id(product.title, product.price, payment_url +'?order_id={CHECKOUT_SESSION_ID}')})
+
+#*** Pantallas de pago exito, error, cancelado    
+class PaymentSuccessView(LoginRequiredMixin, View):
+    def get(self, request, payment_id:int):
+        payment = get_object_or_404(Payment, id=payment_id)
+        return render(request, 'store/payments/success.html', {'payment': payment})
+
+
 
 # @csrf_exempt
 # def create_checkout_session(request):
