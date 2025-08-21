@@ -133,7 +133,7 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
             )
             
         if request.headers.get("Content-Type") == "application/json":
-            return JsonResponse({"'redirect' ": reverse("s.payment.success", kwargs={"payment_id": payment.id})}, status=404)
+            return JsonResponse({"redirect": reverse("s.payment.success", kwargs={"payment_id": payment.id})})
         
         return  redirect("s.payment.success", payment_id=payment.id)
 
@@ -157,6 +157,14 @@ class PaymentSuccessView(LoginRequiredMixin, View):
     def get(self, request, payment_id:int):
         payment = get_object_or_404(Payment, id=payment_id)
         return render(request, 'store/payments/success.html', {'payment': payment})
+    
+class PaymentCancelView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'store/payments/cancel.html')
+
+class PaymentErrorView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'store/payments/error.html')
 
 
 
@@ -195,24 +203,24 @@ class PaymentSuccessView(LoginRequiredMixin, View):
 #         return JsonResponse({'error': str(e)}, status=400)
     
     
-def check_payment(request,session_id):
-    try:
-        # Obtener la sesión de Stripe
-        session = stripe.checkout.Session.retrieve(session_id)
-        # Revisar si el pago está completo
-        if session.payment_status == 'paid':
-            result = {
-                'status': 'COMPLETED',
-                'idAPI': session_id,
-                'responseAPI': json.dumps(dict(session)),  # Convierte objeto a dict
-                # 'responseAPI': json.loads(json.dumps(dict(session))),  # Convierte a dict para JSON
-                'payment': 'stripe',
-                'price': session.amount_total // 100  # Convertir de centavos a unidad
-            }
+# def check_payment(request,session_id):
+#     try:
+#         # Obtener la sesión de Stripe
+#         session = stripe.checkout.Session.retrieve(session_id)
+#         # Revisar si el pago está completo
+#         if session.payment_status == 'paid':
+#             result = {
+#                 'status': 'COMPLETED',
+#                 'idAPI': session_id,
+#                 'responseAPI': json.dumps(dict(session)),  # Convierte objeto a dict
+#                 # 'responseAPI': json.loads(json.dumps(dict(session))),  # Convierte a dict para JSON
+#                 'payment': 'stripe',
+#                 'price': session.amount_total // 100  # Convertir de centavos a unidad
+#             }
 
-        return JsonResponse(result)
-    except stripe.error.StripeError as e:
-        return JsonResponse({'error': str(e)}, status=400)
+#         return JsonResponse(result)
+#     except stripe.error.StripeError as e:
+#         return JsonResponse({'error': str(e)}, status=400)
 
 
 

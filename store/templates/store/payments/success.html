@@ -3,7 +3,7 @@
 {% block content %}
 <div class="post prose-lg">
     <div class="sm:grid grid-cols-[1fr_2fr] gap-7">
-
+  
         {% if payment.paymentable.image %}
             <img class="post" alt="{{ payment.paymentable.title }}" title="{{ payment.paymentable.title }}" src="{{ payment.paymentable.getImageUrl }}">
         {% endif %}

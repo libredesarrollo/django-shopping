@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import BookIndex, BookShow, PaymentBookView, StripeView, PaymentSuccessView
+from .views import BookIndex, BookShow, PaymentBookView, StripeView, PaymentSuccessView, PaymentCancelView, PaymentErrorView
+
 # from . import views
 
 urlpatterns = [
@@ -15,4 +16,6 @@ urlpatterns = [
     path('payment/stripe/create-checkout-session/', StripeView.as_view(), name='s.create_checkout_session'),
     # Pantallas de pago exito, error, cancelado    
     path('payment/success/<int:payment_id>', PaymentSuccessView.as_view(), name='s.payment.success'),
+    path('payment/cancel/', PaymentCancelView.as_view(), name='s.payment.cancel'),
+    path('payment/error/', PaymentErrorView.as_view(), name='s.payment.error'),
 ]
