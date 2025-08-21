@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.utils.dateparse import parse_date
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 
 from django.shortcuts import render
 from django.urls import reverse
@@ -156,6 +157,11 @@ class StripeView(LoginRequiredMixin, View, BasePayment):
 class PaymentSuccessView(LoginRequiredMixin, View):
     def get(self, request, payment_id:int):
         payment = get_object_or_404(Payment, id=payment_id)
+
+        # solamente lo puede ver el dueno del pago
+        if payment.user_id != request.user.id:
+            raise PermissionDenied
+
         return render(request, 'store/payments/success.html', {'payment': payment})
     
 class PaymentCancelView(LoginRequiredMixin, View):

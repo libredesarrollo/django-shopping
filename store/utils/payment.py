@@ -1,5 +1,7 @@
 
 from django.conf import settings
+from django.http import JsonResponse
+from django.utils.translation import gettext_lazy as _
 
 import stripe
 import requests
@@ -7,14 +9,34 @@ import requests
 from decimal import Decimal
 import json
 
+from store.models import Payment
+
 stripe.api_key = settings.STRIPE_SECRET
 
-class AbstractPayment:
-    status: str = None
-    idAPI: str = None
-    type: str = None
-    trace: str = None
-    price: float = None
+from abc import ABC
+from typing import Optional
+
+class AbstractPayment(ABC):
+    status: Optional[str] = None
+    idAPI: Optional[str] = None
+    type: Optional[str] = None
+    trace: Optional[str] = None
+    price: Optional[float] = None
+
+    def __init__(self):
+        # Atributos de estado del pago, inicializados en None
+        self.status = None
+        self.idAPI = None
+        self.type = None
+        self.trace = None
+        self.price = None
+
+# class AbstractPayment:
+#     status: str = None
+#     idAPI: str = None
+#     type: str = None
+#     trace: str = None
+#     price: float = None
     # def __init__(self, status, idAPI, type, trace, price):
     #     self.status = status
     #     self.idAPI = idAPI
@@ -26,7 +48,7 @@ class AbstractPayment:
 # Capa 1 PayPal plataforma de pago 
 class PaymentPaypalClient(AbstractPayment):
     def __init__(self):
-        
+        super().__init__()
         # Usar configuración desde settings.py
         env = settings.PAYPAL_PRODUCTION
         self.base_url = (
@@ -101,6 +123,8 @@ class PaymentPaypalClient(AbstractPayment):
 
 # Capa 3 Pasarela de Pago Stripe
 class PaymentStripeClient(AbstractPayment):
+    def __init__(self):
+        super().__init__()
     # def __init__(self, product_title: str, product_price: float, product_id: int, success_url: str):
     #     # Detalles del producto a comprar
 
@@ -156,6 +180,10 @@ class PaymentStripeClient(AbstractPayment):
 # Capa 2 - Control de Pasarelas de pago
 class BasePayment(PaymentPaypalClient, PaymentStripeClient):
     def process_order(self, order_id:str, type:str) -> bool:
+
+        #TODO revisar que NO compre el mismo producto 2 veces
+        if Payment.objects.filter(orderId=order_id).exists():
+            return JsonResponse({"error": _("Order Already Paid")}, status=400)
 
         if type == 'paypal':
             # Paypal
