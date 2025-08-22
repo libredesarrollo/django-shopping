@@ -22,6 +22,7 @@ class AbstractPayment(ABC):
     type: Optional[str] = None
     trace: Optional[str] = None
     price: Optional[float] = None
+    message_error: Optional[str] = None
 
     def __init__(self):
         # Atributos de estado del pago, inicializados en None
@@ -30,6 +31,9 @@ class AbstractPayment(ABC):
         self.type = None
         self.trace = None
         self.price = None
+        self.message_error = None
+
+
 
 # class AbstractPayment:
 #     status: str = None
@@ -99,6 +103,7 @@ class PaymentPaypalClient(AbstractPayment):
             
             return True
         except Exception as e:
+            self.message_error = str(e)
             return False
             # return {"error": str(e)}
 
@@ -115,9 +120,12 @@ class PaymentPaypalClient(AbstractPayment):
             "grant_type": "client_credentials"
         }
         
-        response = requests.post(url, headers=headers, auth=auth, data=data)
-        response.raise_for_status()
-        
+        try:
+            response = requests.post(url, headers=headers, auth=auth, data=data)
+            response.raise_for_status()
+        except Exception as e:
+            self.message_error = str(e)
+            return ""
         return response.json().get("access_token")
 
 
@@ -155,9 +163,10 @@ class PaymentStripeClient(AbstractPayment):
             )
             return checkout_session.id
         except Exception as e:
-            return str(e)
+            self.message_error = str(e)
+            return ""
 
-    def check_order_stripe(self, session_id: str):
+    def check_order_stripe(self, session_id: str) -> bool:
         try:
             # Obtener la sesión de Stripe
             session = stripe.checkout.Session.retrieve(session_id)
@@ -175,7 +184,10 @@ class PaymentStripeClient(AbstractPayment):
                 # self.price = session.amount_total // 100
 
         except stripe.error.StripeError as e:
-            pass #str(e)
+            self.message_error = str(e)
+            return False
+        
+        return True
 
 # Capa 2 - Control de Pasarelas de pago
 class BasePayment(PaymentPaypalClient, PaymentStripeClient):
@@ -183,15 +195,18 @@ class BasePayment(PaymentPaypalClient, PaymentStripeClient):
 
         #TODO revisar que NO compre el mismo producto 2 veces
         if Payment.objects.filter(orderId=order_id).exists():
-            return JsonResponse({"error": _("Order Already Paid")}, status=400)
+            self.message_error =  _("Order Already Paid")
+            return False
+            #return JsonResponse({"error": _("Order Already Paid")}, status=400)
 
         if type == 'paypal':
             # Paypal
-            self.process_order_paypal(order_id)
+            return self.process_order_paypal(order_id)
         elif type == 'stripe':
             # Stripe
-            self.check_order_stripe(order_id)
+            return self.check_order_stripe(order_id)
         
-        return True
+        self.message_error =  _("Invalid Type")
+        return False
 
 

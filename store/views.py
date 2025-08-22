@@ -110,6 +110,9 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
      
         # procesamos la orden
         response = self.process_order(order_id, type)
+
+        if response == False:
+            return JsonResponse({"error": self.message_error}, status=400)
         
         #usuario auth
         user = request.user 
@@ -121,17 +124,16 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
             return JsonResponse({"error": _("Not Book Found")}, status=404)
 
         # creamos el producto si todo esta ok
-        if response == True:
-            payment = Payment.objects.create(
-                user=user,
-                type=self.type,  
-                coupon=None,  
-                orderId=order_id,
-                price=self.price,
-                trace=self.trace,  
-                content_type=ContentType.objects.get_for_model(book),
-                object_id=book.id
-            )
+        payment = Payment.objects.create(
+            user=user,
+            type=self.type,  
+            coupon=None,  
+            orderId=order_id,
+            price=self.price,
+            trace=self.trace,  
+            content_type=ContentType.objects.get_for_model(book),
+            object_id=book.id
+        )
             
         if request.headers.get("Content-Type") == "application/json":
             return JsonResponse({"redirect": reverse("s.payment.success", kwargs={"payment_id": payment.id})})
