@@ -5,7 +5,11 @@
 
     <div>
         <h1 class="mb-2 md:mt-30">
-            <span class="italic">{{ _("Error") }}:</span>
+            <span class="italic">{{ _("Error") }}
+                {% if message_error %}
+                    : <span class="!text-red-900 font-bold">{{ message_error }}</span>
+                {% endif %}
+            </span>
         </h1>
 
         <div class="mx-5">

@@ -88,9 +88,14 @@ class BookShow(DetailView):
         context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID     
         context['stripe_key'] = settings.STRIPE_KEY     
         return context
+        
+    
     
 # Procesa la compra de un Producto/Libro
 class PaymentBookView(LoginRequiredMixin, View, BasePayment):
+    def __init__(self):
+        # super().__init__()
+        BasePayment.__init__(self) 
    
     def get(self, request, order_id:str, book_id:int, type:str):
         return self.process(request, order_id, book_id, type)
@@ -106,13 +111,23 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
         if order_id == 'orderID':
             order_id = request.GET.get('order_id', '')
             if not order_id:
-                return JsonResponse({"error": _("Not Order Found")}, status=404)
+                # return redirect("s.payment.error", message_error=_("Not Order Found"))
+                # return JsonResponse({"error": _("Not Order Found")}, status=404)
+                if request.headers.get("Content-Type") == "application/json":
+                    return JsonResponse({"redirect": reverse("s.payment.error", kwargs={"message_error": _("Not Order Found")})})
+        
+                return redirect("s.payment.error", message_error=_("Not Order Found"))
      
         # procesamos la orden
         response = self.process_order(order_id, type)
 
+        # Error en la orden
         if response == False:
-            return JsonResponse({"error": self.message_error}, status=400)
+            # return JsonResponse({"error": self.message_error}, status=400)
+            # return redirect("s.payment.error", message_error=self.message_error)
+            if request.headers.get("Content-Type") == "application/json":
+                return JsonResponse({"redirect": reverse("s.payment.error", kwargs={"message_error": self.message_error})})
+            return redirect("s.payment.error", message_error=self.message_error)
         
         #usuario auth
         user = request.user 
@@ -138,7 +153,7 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
         if request.headers.get("Content-Type") == "application/json":
             return JsonResponse({"redirect": reverse("s.payment.success", kwargs={"payment_id": payment.id})})
         
-        return  redirect("s.payment.success", payment_id=payment.id)
+        return redirect("s.payment.success", payment_id=payment.id)
 
 # STRIPE Helper View
 class StripeView(LoginRequiredMixin, View, BasePayment):
@@ -151,7 +166,7 @@ class StripeView(LoginRequiredMixin, View, BasePayment):
             try:
                 product = Book.objects.get(id=id)
             except Book.DoesNotExist:
-                return JsonResponse({'error': 'Libro no encontrado'}, status=404)
+                return JsonResponse({'error': _("Not Book Found")}, status=404)
             
         return JsonResponse({'id': self.generate_session_id(product.title, product.price, payment_url +'?order_id={CHECKOUT_SESSION_ID}')})
 
@@ -171,8 +186,8 @@ class PaymentCancelView(LoginRequiredMixin, View):
         return render(request, 'store/payments/cancel.html')
 
 class PaymentErrorView(LoginRequiredMixin, View):
-    def get(self, request):
-        return render(request, 'store/payments/error.html')
+    def get(self, request, message_error:str = ''):
+        return render(request, 'store/payments/error.html', {'message_error': message_error})
 
 
 

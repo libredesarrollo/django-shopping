@@ -18,4 +18,5 @@ urlpatterns = [
     path('payment/success/<int:payment_id>', PaymentSuccessView.as_view(), name='s.payment.success'),
     path('payment/cancel/', PaymentCancelView.as_view(), name='s.payment.cancel'),
     path('payment/error/', PaymentErrorView.as_view(), name='s.payment.error'),
+    path('payment/error/<str:message_error>', PaymentErrorView.as_view(), name='s.payment.error'),
 ]
