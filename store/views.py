@@ -15,8 +15,6 @@ from django.urls import reverse
 
 import stripe
 
-import json
-
 from blog.models import Category, Tag
 from .models import Book, Payment
 from .utils.payment import BasePayment
@@ -33,6 +31,7 @@ class BookIndex(ListView):
     paginate_by = 15
 
     def get_queryset(self):
+
         queryset = Book.objects.filter(posted='yes').select_related('post').prefetch_related('tags')
 
         search = self.request.GET.get('search', '')
@@ -95,15 +94,21 @@ class BookShow(DetailView):
 class PaymentBookView(LoginRequiredMixin, View, BasePayment):
     def __init__(self):
         # super().__init__()
-        BasePayment.__init__(self) 
-   
+        BasePayment.__init__(self)
+        
+    def _redirect_or_json(self, request, url_name, **kwargs):
+        url = reverse(url_name, kwargs=kwargs)
+        if request.headers.get("Content-Type") == "application/json":
+            return JsonResponse({"redirect": url})
+        return redirect(url, **kwargs)
+    
     def get(self, request, order_id:str, book_id:int, type:str):
-        return self.process(request, order_id, book_id, type)
+        return self._process(request, order_id, book_id, type)
     
     def post(self, request, order_id:str, book_id:int, type:str):
-        return self.process(request, order_id, book_id, type) 
+        return self._process(request, order_id, book_id, type) 
     
-    def process(self, request, order_id:str, book_id:int, type:str):
+    def _process(self, request, order_id:str, book_id:int, type:str):
         #TODO revisar que NO compre el mismo producto 2 veces
      
         # si la ordenID en la URL no es valida, lo busca en el request, caso Stripe   
@@ -113,10 +118,11 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
             if not order_id:
                 # return redirect("s.payment.error", message_error=_("Not Order Found"))
                 # return JsonResponse({"error": _("Not Order Found")}, status=404)
-                if request.headers.get("Content-Type") == "application/json":
-                    return JsonResponse({"redirect": reverse("s.payment.error", kwargs={"message_error": _("Not Order Found")})})
+                # if request.headers.get("Content-Type") == "application/json":
+                #     return JsonResponse({"redirect": reverse("s.payment.error", kwargs={"message_error": _("Not Order Found")})})
         
-                return redirect("s.payment.error", message_error=_("Not Order Found"))
+                # return redirect("s.payment.error", message_error=_("Not Order Found"))
+                return self._redirect_or_json(request, "s.payment.error", message_error=_("Not Order Found"))
      
         # procesamos la orden
         response = self.process_order(order_id, type)
@@ -125,9 +131,10 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
         if response == False:
             # return JsonResponse({"error": self.message_error}, status=400)
             # return redirect("s.payment.error", message_error=self.message_error)
-            if request.headers.get("Content-Type") == "application/json":
-                return JsonResponse({"redirect": reverse("s.payment.error", kwargs={"message_error": self.message_error})})
-            return redirect("s.payment.error", message_error=self.message_error)
+            # if request.headers.get("Content-Type") == "application/json":
+            #     return JsonResponse({"redirect": reverse("s.payment.error", kwargs={"message_error": self.message_error})})
+            # return redirect("s.payment.error", message_error=self.message_error)
+            return self._redirect_or_json(request, "s.payment.error", message_error=self.message_error)
         
         #usuario auth
         user = request.user 
@@ -136,7 +143,8 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
         try:
             book = Book.objects.get(id=book_id)
         except Book.DoesNotExist:
-            return JsonResponse({"error": _("Not Book Found")}, status=404)
+            # return JsonResponse({"error": _("Not Book Found")}, status=404)
+            return self._redirect_or_json(request, "s.payment.error", message_error=_("Not Book Found"))
 
         # creamos el producto si todo esta ok
         payment = Payment.objects.create(
@@ -150,10 +158,12 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
             object_id=book.id
         )
             
-        if request.headers.get("Content-Type") == "application/json":
-            return JsonResponse({"redirect": reverse("s.payment.success", kwargs={"payment_id": payment.id})})
+        # if request.headers.get("Content-Type") == "application/json":
+        #     return JsonResponse({"redirect": reverse("s.payment.success", kwargs={"payment_id": payment.id})})
         
-        return redirect("s.payment.success", payment_id=payment.id)
+        # return redirect("s.payment.success", payment_id=payment.id)
+        
+        return self._redirect_or_json(request, "s.payment.success", payment_id=payment.id)
 
 # STRIPE Helper View
 class StripeView(LoginRequiredMixin, View, BasePayment):

@@ -57,13 +57,13 @@ class PaymentPaypalClient(AbstractPayment):
     
     def __init__(self):
         super().__init__()
-        print('*****************************Three')
+        
         # Usar configuración desde settings.py
         env = settings.PAYPAL_PRODUCTION
         self.base_url = (
-            "https://api-m.paypal.com"
+            "https://api-m.sandbox.paypal.com"
             if env
-            else "https://api-m.sandbox.paypal.com"
+            else "https://api-m.paypal.com"
         )
         self.client_id = settings.PAYPAL_CLIENT_ID
         self.secret = settings.PAYPAL_SECRET
@@ -98,8 +98,7 @@ class PaymentPaypalClient(AbstractPayment):
                 json=payload
             )
             data = response.json()
-            print(self.base_url+'------------------------------|||')
-            print(response+'------------------------------|||')
+
             if data.get("status") == "COMPLETED":
                 self.status = "COMPLETED"
                 self.idAPI = order_id
@@ -198,7 +197,6 @@ class PaymentStripeClient(AbstractPayment):
 # Capa 2 - Control de Pasarelas de pago
 class BasePayment(PaymentPaypalClient, PaymentStripeClient):
     def __init__(self):
-        print('*******************************Two')
         super().__init__()
         
     def process_order(self, order_id:str, type:str) -> bool:
