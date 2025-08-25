@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import BookIndex, BookShow, PaymentBookView, StripeView, PaymentSuccessView, PaymentCancelView, PaymentErrorView
+from .views import BookIndex, BookShow, PaymentBookView, StripeView, PaymentSuccessView, PaymentCancelView, PaymentErrorView, UserPaymentsView
 
 # from . import views
 
@@ -19,4 +19,6 @@ urlpatterns = [
     path('payment/cancel/', PaymentCancelView.as_view(), name='s.payment.cancel'),
     path('payment/error/', PaymentErrorView.as_view(), name='s.payment.error'),
     path('payment/error/<str:message_error>', PaymentErrorView.as_view(), name='s.payment.error'),
+    # listado de pagos del usuario
+    path("user/payments/", UserPaymentsView.as_view(), name="s.payments.user"),
 ]

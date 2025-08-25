@@ -87,8 +87,20 @@ class BookShow(DetailView):
         context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID     
         context['stripe_key'] = settings.STRIPE_KEY     
         return context
-        
-    
+
+# listado de pagos del usuario        
+class UserPaymentsView(LoginRequiredMixin, ListView):
+    model = Payment
+    template_name = "store/user/payments.html"
+    context_object_name = "payments"
+
+    def get_queryset(self):
+        # equivalente a: Payment::where("user_id", auth()->user()->id)->with("paymentable")->get();
+        return (
+            Payment.objects.filter(user=self.request.user)
+            # .select_related("paymentable")  
+            .order_by("-created_at")
+        )
     
 # Procesa la compra de un Producto/Libro
 class PaymentBookView(LoginRequiredMixin, View, BasePayment):
@@ -178,7 +190,14 @@ class StripeView(LoginRequiredMixin, View, BasePayment):
             except Book.DoesNotExist:
                 return JsonResponse({'error': _("Not Book Found")}, status=404)
             
-        return JsonResponse({'id': self.generate_session_id(product.title, product.price, payment_url +'?order_id={CHECKOUT_SESSION_ID}')})
+        # ruta relativa
+        relative_url = reverse('s.payment.cancel')
+
+        # Ruta absoluta
+        cancel_absolute_url = request.build_absolute_uri(relative_url)
+            
+        return JsonResponse({'id': self.generate_session_id(product.title, product.price, payment_url +'?order_id={CHECKOUT_SESSION_ID}', cancel_absolute_url)})
+
 
 #*** Pantallas de pago exito, error, cancelado    
 class PaymentSuccessView(LoginRequiredMixin, View):
@@ -310,4 +329,3 @@ class PaymentErrorView(LoginRequiredMixin, View):
 #             return JsonResponse({'id': checkout_session.id})
 #         except Exception as e:
 #             return JsonResponse({'error': str(e)}, status=400)
-

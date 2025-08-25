@@ -2,17 +2,14 @@
 
 <div id="paypalButtons"></div>
 
+
+
 <script>
+    const component = this;
     paypal.Buttons({
-        onClick: function() {
-            Alpine.store('payment').loading = true;
-        },
-        onCancel: function (data) {
-        
-        Alpine.store('payment').loading = false;
-        },
-        onError: function (err) {
-            Alpine.store('payment').loading = false;
+         onClick: function() {
+            console.log('Button clicked');
+            component.loading = true;
         },
         createOrder: function(data, actions){
             return actions.order.create({

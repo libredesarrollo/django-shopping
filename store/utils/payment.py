@@ -145,7 +145,7 @@ class PaymentStripeClient(AbstractPayment):
     #     self.product_title = product_title
     #     self.product_id = product_id
 
-    def generate_session_id(self, product_title: str, product_price: float, success_url: str) -> str:
+    def generate_session_id(self, product_title: str, product_price: float, success_url: str, cancel_absolute_url: str) -> str:
 
         try:
             checkout_session = stripe.checkout.Session.create(
@@ -164,7 +164,7 @@ class PaymentStripeClient(AbstractPayment):
                 ],
                 mode='payment',
                 success_url=success_url,
-                cancel_url='http://localhost:8000/cancel',
+                cancel_url=cancel_absolute_url,
             )
             return checkout_session.id
         except Exception as e:

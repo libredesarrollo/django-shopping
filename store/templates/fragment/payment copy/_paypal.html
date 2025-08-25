@@ -2,18 +2,11 @@
 
 <div id="paypalButtons"></div>
 
+
+
 <script>
+
     paypal.Buttons({
-        onClick: function() {
-            Alpine.store('payment').loading = true;
-        },
-        onCancel: function (data) {
-        
-        Alpine.store('payment').loading = false;
-        },
-        onError: function (err) {
-            Alpine.store('payment').loading = false;
-        },
         createOrder: function(data, actions){
             return actions.order.create({
                 purchase_units:[

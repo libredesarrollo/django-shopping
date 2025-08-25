@@ -1,0 +1,28 @@
+{% extends "master.html" %}
+
+{% block content %}
+<div class="post prose-lg">
+    <h1 class="text-center">
+        {{ _("User Payments") }}
+    </h1>
+    <div class="mx-auto max-w-lg">
+        <hr class="dark:text-white">
+        {% for p in payments %}
+            <div class="border-white border-2 rounded-sm p-4 mt-3">
+                <p class="text-xl !my-0">{{ p.paymentable.title }}</p>
+                <p class="text-xs italic ml-4">
+                    {{ p.type }}/{{ p.created_at }}
+                </p>
+                <p class="text-center !my-0">
+                    <a href="{% url 's.payment.success' p.id %}" 
+                       class="btn-sm btn-success-border" target="_blank">
+                        {{ _("Detail") }}
+                    </a>
+                </p>
+            </div>
+        {% empty %}
+            <p class="text-center">{{ _("No payments found.") }}</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

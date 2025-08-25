@@ -5,7 +5,10 @@
 const stripe = Stripe("{{ stripe_key }}");
 // let click = false;
 document.getElementById("payStripe").addEventListener("click", function () {
-    Alpine.store('payment').loading = true;
+    
+   /* if(click){
+        return;
+    }*/
     document.getElementById("payStripe").disabled = true;
     
     //click = true;
