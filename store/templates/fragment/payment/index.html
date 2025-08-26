@@ -1,13 +1,23 @@
 <script>
     document.addEventListener('alpine:init', () => {
-    Alpine.store('payment', {
-        loading: false
+        Alpine.store('payment', {
+            loading: false
+        });
     });
-});
 </script>
 
-<div x-data>
-    <div x-show="$store.payment.loading">...loading</div>
+<div class="flex gap-2 justify-center" x-data>
+    <div x-show="$store.payment.loading" class="mt-4 text-blue-600 font-semibold">
+        <svg class="inline w-5 h-5 animate-spin mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24">
+            <circle class="opacity-25 text-purple-600" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+            </circle>
+            <path class="opacity-75 text-purple-600" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z">
+            </path>
+        </svg>
+        {{ _('Processing') }}...
+    </div>
     <div x-show="!$store.payment.loading" class="flex flex-col gap-2 justify-center items-center mt-5">
         {% include "fragment/payment/_paypal.html" with paypal_client_id=paypal_client_id price=price id=id url=payment_url_paypal %}
         <p>{{_('Or')}}</p>

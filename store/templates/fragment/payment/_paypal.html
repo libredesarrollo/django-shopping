@@ -8,8 +8,7 @@
             Alpine.store('payment').loading = true;
         },
         onCancel: function (data) {
-        
-        Alpine.store('payment').loading = false;
+            Alpine.store('payment').loading = false;
         },
         onError: function (err) {
             Alpine.store('payment').loading = false;
