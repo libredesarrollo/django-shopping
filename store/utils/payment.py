@@ -1,6 +1,5 @@
 
 from django.conf import settings
-from django.http import JsonResponse
 from django.utils.translation import gettext_lazy as _
 
 import stripe
@@ -32,22 +31,6 @@ class AbstractPayment(ABC):
         self.trace = None
         self.price = None
         self.message_error = None
-
-
-
-# class AbstractPayment:
-#     status: str = None
-#     idAPI: str = None
-#     type: str = None
-#     trace: str = None
-#     price: float = None
-    # def __init__(self, status, idAPI, type, trace, price):
-    #     self.status = status
-    #     self.idAPI = idAPI
-    #     self.type = type          # (paypal, stripe, etc.)
-    #     self.trace = trace        # traza del pago
-    #     self.price = price
-
 
 # Capa 1 PayPal plataforma de pago 
 class PaymentPaypalClient(AbstractPayment):
@@ -86,10 +69,6 @@ class PaymentPaypalClient(AbstractPayment):
                     "return_url": "http://djangoshopping.test/paypal",
                     "cancel_url": "http://djangoshopping.test/paypal/cancel"
                 }
-                # "application_context": {
-                #     "return_url": "<URL-RETURN>",
-                #     "cancel_url": "<URL-CANCEL>"
-                # }
             }
      
             response = requests.post(
@@ -110,7 +89,6 @@ class PaymentPaypalClient(AbstractPayment):
         except Exception as e:
             self.message_error = str(e)
             return False
-            # return {"error": str(e)}
 
     def get_access_token(self) -> str:
         url = f"{self.base_url}/v1/oauth2/token"
@@ -138,12 +116,6 @@ class PaymentPaypalClient(AbstractPayment):
 class PaymentStripeClient(AbstractPayment):
     def __init__(self):
         super().__init__()
-    # def __init__(self, product_title: str, product_price: float, product_id: int, success_url: str):
-    #     # Detalles del producto a comprar
-
-    #     self.product_price = product_price
-    #     self.product_title = product_title
-    #     self.product_id = product_id
 
     def generate_session_id(self, product_title: str, product_price: float, success_url: str, cancel_absolute_url: str) -> str:
 
@@ -182,11 +154,6 @@ class PaymentStripeClient(AbstractPayment):
                 self.type = 'stripe'
                 self.trace = json.dumps(dict(session))
                 self.price = session.amount_total // 100
-                # self.status = 'COMPLETED',
-                # self.idAPI = session_id,
-                # self.type = 'stripe',
-                # self.trace = json.dumps(dict(session)),
-                # self.price = session.amount_total // 100
 
         except stripe.error.StripeError as e:
             self.message_error = str(e)
@@ -205,7 +172,6 @@ class BasePayment(PaymentPaypalClient, PaymentStripeClient):
         if Payment.objects.filter(orderId=order_id).exists():
             self.message_error =  _("Order Already Paid")
             return False
-            #return JsonResponse({"error": _("Order Already Paid")}, status=400)
 
         if type == 'paypal':
             # Paypal

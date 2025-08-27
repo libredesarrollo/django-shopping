@@ -46,10 +46,6 @@ class BookIndex(ListView):
                 Q(title__icontains=search) |
                 Q(description__icontains=search)
             )
-        # if language:
-        #     queryset = queryset.filter(language=language)
-        # if category_id:
-        #     queryset = queryset.filter(category_id=category_id)
         
         if language:
             queryset = queryset.filter(post__language=language)
@@ -128,12 +124,6 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
         if order_id == 'orderID':
             order_id = request.GET.get('order_id', '')
             if not order_id:
-                # return redirect("s.payment.error", message_error=_("Not Order Found"))
-                # return JsonResponse({"error": _("Not Order Found")}, status=404)
-                # if request.headers.get("Content-Type") == "application/json":
-                #     return JsonResponse({"redirect": reverse("s.payment.error", kwargs={"message_error": _("Not Order Found")})})
-        
-                # return redirect("s.payment.error", message_error=_("Not Order Found"))
                 return self._redirect_or_json(request, "s.payment.error", message_error=_("Not Order Found"))
      
         # procesamos la orden
@@ -141,11 +131,6 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
 
         # Error en la orden
         if response == False:
-            # return JsonResponse({"error": self.message_error}, status=400)
-            # return redirect("s.payment.error", message_error=self.message_error)
-            # if request.headers.get("Content-Type") == "application/json":
-            #     return JsonResponse({"redirect": reverse("s.payment.error", kwargs={"message_error": self.message_error})})
-            # return redirect("s.payment.error", message_error=self.message_error)
             return self._redirect_or_json(request, "s.payment.error", message_error=self.message_error)
         
         #usuario auth
@@ -155,7 +140,6 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
         try:
             book = Book.objects.get(id=book_id)
         except Book.DoesNotExist:
-            # return JsonResponse({"error": _("Not Book Found")}, status=404)
             return self._redirect_or_json(request, "s.payment.error", message_error=_("Not Book Found"))
 
         # creamos el producto si todo esta ok
@@ -169,12 +153,7 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
             content_type=ContentType.objects.get_for_model(book),
             object_id=book.id
         )
-            
-        # if request.headers.get("Content-Type") == "application/json":
-        #     return JsonResponse({"redirect": reverse("s.payment.success", kwargs={"payment_id": payment.id})})
-        
-        # return redirect("s.payment.success", payment_id=payment.id)
-        
+
         return self._redirect_or_json(request, "s.payment.success", payment_id=payment.id)
 
 # STRIPE Helper View
@@ -198,7 +177,6 @@ class StripeView(LoginRequiredMixin, View, BasePayment):
             
         return JsonResponse({'id': self.generate_session_id(product.title, product.price, payment_url +'?order_id={CHECKOUT_SESSION_ID}', cancel_absolute_url)})
 
-
 #*** Pantallas de pago exito, error, cancelado    
 class PaymentSuccessView(LoginRequiredMixin, View):
     def get(self, request, payment_id:int):
@@ -217,115 +195,3 @@ class PaymentCancelView(LoginRequiredMixin, View):
 class PaymentErrorView(LoginRequiredMixin, View):
     def get(self, request, message_error:str = ''):
         return render(request, 'store/payments/error.html', {'message_error': message_error})
-
-
-
-# @csrf_exempt
-# def create_checkout_session(request):
-
-#     entity = request.POST.get('entity', '')
-#     id = request.POST.get('id', '')
-    
-#     if entity == 'book':
-#         try:
-#             product = Book.objects.get(id=id)
-#         except Book.DoesNotExist:
-#             return JsonResponse({'error': 'Libro no encontrado'}, status=404)
-#     try:
-#         checkout_session = stripe.checkout.Session.create(
-#             payment_method_types=['card'],
-#             line_items=[
-#                 {
-#                     'price_data': {
-#                         'currency': 'usd',
-#                         'product_data': {
-#                             'name': product.title,
-#                         },
-#                         'unit_amount': int(Decimal(product.price_offert) * 100),  # en centavos
-#                     },
-#                     'quantity': 1,
-#                 },
-#             ],
-#             mode='payment',
-#             success_url='http://localhost:8000/success?order_id={CHECKOUT_SESSION_ID}',
-#             cancel_url='http://localhost:8000/cancel',
-#         )
-#         return JsonResponse({'id': checkout_session.id})
-#     except Exception as e:
-#         return JsonResponse({'error': str(e)}, status=400)
-    
-    
-# def check_payment(request,session_id):
-#     try:
-#         # Obtener la sesión de Stripe
-#         session = stripe.checkout.Session.retrieve(session_id)
-#         # Revisar si el pago está completo
-#         if session.payment_status == 'paid':
-#             result = {
-#                 'status': 'COMPLETED',
-#                 'idAPI': session_id,
-#                 'responseAPI': json.dumps(dict(session)),  # Convierte objeto a dict
-#                 # 'responseAPI': json.loads(json.dumps(dict(session))),  # Convierte a dict para JSON
-#                 'payment': 'stripe',
-#                 'price': session.amount_total // 100  # Convertir de centavos a unidad
-#             }
-
-#         return JsonResponse(result)
-#     except stripe.error.StripeError as e:
-#         return JsonResponse({'error': str(e)}, status=400)
-
-
-
-# class CreateCheckoutSessionView(View):
-#     def get(self, request, session_id, *args, **kwargs):
-#         try:
-#             # Obtener la sesión de Stripe
-#             session = stripe.checkout.Session.retrieve(session_id)
-
-#             if session.payment_status == 'paid':
-#                 result = {
-#                     'status': 'COMPLETED',
-#                     'idAPI': session_id,
-#                     'responseAPI': json.dumps(dict(session)),
-#                     'payment': 'stripe',
-#                     'price': session.amount_total // 100
-#                 }
-#                 return JsonResponse(result)
-
-#             return JsonResponse({'status': session.payment_status})
-#         except stripe.error.StripeError as e:
-#             return JsonResponse({'error': str(e)}, status=400)
-        
-#     def post(self, request, *args, **kwargs):
-#         entity = request.POST.get('entity', '')
-#         entity_id = request.POST.get('id', '')
-
-#         product = None
-#         if entity == 'book':
-#             try:
-#                 product = Book.objects.get(id=entity_id)
-#             except Book.DoesNotExist:
-#                 return JsonResponse({'error': 'Libro no encontrado'}, status=404)
-
-#         try:
-#             checkout_session = stripe.checkout.Session.create(
-#                 payment_method_types=['card'],
-#                 line_items=[
-#                     {
-#                         'price_data': {
-#                             'currency': 'usd',
-#                             'product_data': {
-#                                 'name': product.title,
-#                             },
-#                             'unit_amount': int(Decimal(product.price_offert) * 100),  # en centavos
-#                         },
-#                         'quantity': 1,
-#                     },
-#                 ],
-#                 mode='payment',
-#                 success_url='http://localhost:8000/success?order_id={CHECKOUT_SESSION_ID}',
-#                 cancel_url='http://localhost:8000/cancel',
-#             )
-#             return JsonResponse({'id': checkout_session.id})
-#         except Exception as e:
-#             return JsonResponse({'error': str(e)}, status=400)
