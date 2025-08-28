@@ -3,7 +3,7 @@ from django import forms
 
 from django.contrib.contenttypes.admin import GenericTabularInline
 
-from .models import Book
+from .models import Book, Product, ProductType
 from blog.models import Taggable
 
 class BookForm(forms.ModelForm):
@@ -24,3 +24,26 @@ class BookAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',) }
     inlines = [TaggableInline]
     form = BookForm
+    
+    
+# tipo producto
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ('title','subtitle','slug','post', 'path','content','description','posted','product_type', 'date','image', 'user', 'price_offert', 'price')
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 10, 'cols': 80}),
+        }
+        
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('title',) }
+    inlines = [TaggableInline]
+    form = ProductForm
+
+@admin.register(ProductType)
+class ProductTypeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title')
+    prepopulated_fields = {'slug': ('title',) }
+    
+# admin.site.register(ProductType, ProductTypeAdmin)

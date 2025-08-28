@@ -12,8 +12,10 @@ from blog.models import Post
 import os
 
 def upload_to_path(instance, filename):
-
    return os.path.join('books', instance.path, filename)
+
+def upload_product_to_path(instance, filename):
+   return os.path.join('products', instance.path, filename)
 
 class Book(models.Model):
     
@@ -81,3 +83,45 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.orderId}"
+    
+    
+class ProductType(models.Model):
+    title = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.title
+
+class Product(models.Model):
+    
+    POSTED_CHOICES = [
+        ('yes', 'Yes'),
+        ('not', 'Not'),
+        ]
+    title = models.CharField(max_length=250, unique=True)
+    subtitle = models.CharField(max_length=250, unique=True)
+    slug = models.SlugField(max_length=250, unique=True)
+    date = models.DateField(default=timezone.now)
+    description = models.CharField(max_length=500)
+    # content = models.TextField(blank=True, null=True)
+    content = CKEditor5Field('Content', config_name='default', blank=True, null=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='posts')
+    posted = models.CharField(max_length=3, choices=POSTED_CHOICES, default='not')
+    path = models.CharField(max_length=255, null=True, blank=True)
+    image = models.FileField(upload_to=upload_product_to_path, null=True, blank=True)
+    product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE, related_name="products")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="products")
+    price = models.DecimalField(max_digits=7, decimal_places=2, default=0.00)
+    price_offert = models.DecimalField(max_digits=7, decimal_places=2, default=0.00)
+
+    images = GenericRelation('Image')
+    tags = GenericRelation('blog.Taggable')
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def getImageUrl(self):
+        if self.image:
+            return self.image.url
+        return None
