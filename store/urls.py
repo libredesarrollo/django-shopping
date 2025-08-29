@@ -1,13 +1,16 @@
 from django.urls import path
 
-from .views import BookIndex, BookShow, PaymentBookView, StripeView, PaymentSuccessView, PaymentCancelView, PaymentErrorView, UserPaymentsView
+from .views import BookIndex, BookShow, ProductIndex, ProductShow, PaymentBookView, StripeView, PaymentSuccessView, PaymentCancelView, PaymentErrorView, UserPaymentsView
 
 # from . import views
 
 urlpatterns = [
-    # listado y detalle
+    # listado y detalle Book
     path('book', BookIndex.as_view(), name='s.b.index'),
-    path('<slug:slug>', BookShow.as_view(), name='s.b.show'),
+    path('book/<slug:slug>', BookShow.as_view(), name='s.b.show'),
+    # listado y detalle Product
+    path('product', ProductIndex.as_view(), name='s.p.index'),
+    path('product/<slug:slug>', ProductShow.as_view(), name='s.p.show'),
     # pagar un producto
     path('payment/<str:order_id>/<int:book_id>/<str:type>', PaymentBookView.as_view(), name='s.payment'),
     # path('payment/stripe/create-checkout-session/', views.create_checkout_session, name='s.create_checkout_session'),

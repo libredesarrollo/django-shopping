@@ -17,52 +17,50 @@ def upload_to_path(instance, filename):
 def upload_product_to_path(instance, filename):
    return os.path.join('products', instance.path, filename)
 
-class Image(models.Model):
-    path = models.CharField(max_length=255)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey('content_type', 'object_id')
-
-class ProductAbstract(models.Model):
-    class Meta:
-        abstract = True
-
+class Book(models.Model):
+    
     POSTED_CHOICES = [
         ('yes', 'Yes'),
         ('not', 'Not'),
         ]
+
     title = models.CharField(max_length=250, unique=True)
     subtitle = models.CharField(max_length=250, unique=True)
     slug = models.SlugField(max_length=250, unique=True)
+    # date = models.DateField(auto_now_add=True)
     date = models.DateField(default=timezone.now)
-    description = models.CharField(max_length=500)
-    # content = models.TextField(blank=True, null=True)
-    content = CKEditor5Field('Content', config_name='default', blank=True, null=True)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='%(class)s_posts')
-    posted = models.CharField(max_length=3, choices=POSTED_CHOICES, default='not')
     path = models.CharField(max_length=255, null=True, blank=True)
-    image = models.FileField(null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(class)s_products") # Para Book: la relación será Post.book_posts y User.book_products yPara Product: la relación será Post.product_posts y User.product_products
+    # image = models.FileField(upload_to='books/', null=True, blank=True)
+    image = models.FileField(upload_to=upload_to_path, null=True, blank=True)
+    # content = models.TextField()
+    content = CKEditor5Field('Content', config_name='default', blank=True, null=True)
+    description = models.CharField(max_length=500)
+    posted = models.CharField(max_length=3, choices=POSTED_CHOICES, default='not')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='books')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    page = models.PositiveIntegerField(default=0)
+
     price = models.DecimalField(max_digits=7, decimal_places=2, default=0.00)
     price_offert = models.DecimalField(max_digits=7, decimal_places=2, default=0.00)
 
     images = GenericRelation('Image')
     tags = GenericRelation('blog.Taggable')
-
-    def __str__(self):
-        return self.title
-
+    
     @property
     def getImageUrl(self):
         if self.image:
             return self.image.url
         return None
 
-class Book(ProductAbstract):
-    image = models.FileField(upload_to=upload_to_path, null=True, blank=True)
-    page = models.PositiveIntegerField(default=0)
+    def __str__(self):
+        return self.title
 
-
+class Image(models.Model):
+    path = models.CharField(max_length=255)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
 
 class Payment(models.Model):
     
@@ -94,6 +92,36 @@ class ProductType(models.Model):
     def __str__(self):
         return self.title
 
-class Product(ProductAbstract):
+class Product(models.Model):
+    
+    POSTED_CHOICES = [
+        ('yes', 'Yes'),
+        ('not', 'Not'),
+        ]
+    title = models.CharField(max_length=250, unique=True)
+    subtitle = models.CharField(max_length=250, unique=True)
+    slug = models.SlugField(max_length=250, unique=True)
+    date = models.DateField(default=timezone.now)
+    description = models.CharField(max_length=500)
+    # content = models.TextField(blank=True, null=True)
+    content = CKEditor5Field('Content', config_name='default', blank=True, null=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='posts')
+    posted = models.CharField(max_length=3, choices=POSTED_CHOICES, default='not')
+    path = models.CharField(max_length=255, null=True, blank=True)
     image = models.FileField(upload_to=upload_product_to_path, null=True, blank=True)
     product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE, related_name="products")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="products")
+    price = models.DecimalField(max_digits=7, decimal_places=2, default=0.00)
+    price_offert = models.DecimalField(max_digits=7, decimal_places=2, default=0.00)
+
+    images = GenericRelation('Image')
+    tags = GenericRelation('blog.Taggable')
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def getImageUrl(self):
+        if self.image:
+            return self.image.url
+        return None

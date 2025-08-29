@@ -38,46 +38,37 @@
     </div>
 </section>
 
-<div class="flex flex-col items-center mt-5">
-    <div class="w-full sm:max-w-4xl overflow-hidden prose-lg">
-        {% for b in books %}
-        <div class="mt-4">
-            <h3 class="uppercase text-center no-underline  dark:text-white">{{ b.title }}</h3>
-            <p
-                class="tracking-widest text-center text-xs text-gray-500 italic sm:p-1 font-bold uppercase dark:text-gray-300">
-                {{ b.date }} - Andrés Cruz
-            </p>
-        </div>
-
-        <div class="grid @if (b.image) md:grid-cols-2 @endif gap-3">
-            {% if b.image %}
-
-            <img class="post" alt="{{ b.title }}" title="{{ b.title }}" src="{{ b.getImageUrl }}" />
-
-
+<div class="grid xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-5">
+    {% for p in products %}
+        <div class="flex flex-col border rounded-lg shadow p-4 dark:border-white">
+            {% if p.image %}
+                <img class="post" alt="{{ p.title }}" title="{{ p.title }}" src="{{ p.getImageUrl }}" />
             {% endif %}
+            <div class="mt-4">
+                <h3 class="uppercase text-center mt-2 text-lg font-semibold min-h-[3.5rem] mb-0 dark:text-white">{{ p.title }}</h3>
+            </div>
 
-            <p class="sm:mx-2 text-xl mt-6 dark:text-white">
-                <span> {{ b.category.title }}</span>
-                <span class="text-gray-700 dark:text-gray-300">
-                    {{ b.description }}
-                </span>
-            </p>
+            <div class="flex flex-col sm:mx-2 text-xl grow">
+                <!-- Enlace a todos los product -->
+                <div class="flex grow">
+             
+                    <div class="grow">
+                        <!-- Para que vaya a la izquierda -->
+                    </div>
+
+                    <span class="text-left font-semibold text-green-700">
+                        {{ p.price_offert }}$
+                    </span>
+                </div>
+                <!-- Ver el detalle -->
+                <p class="text-center mt-4">
+                    <a variant='primary' class="btn btn-success" href="{% url 's.p.show' p.slug %}">
+                        {{ _('Show') }} </a> 
+                </p>
+            </div>
         </div>
-
-        <p class="text-center mt-4">
-            <a variant='primary' class="btn btn-success" href="{% url 's.b.show' b.slug %}">
-                {{ _('Show') }} </a> 
-        </p>
-        {% endfor %}
-    </div>
+    {% endfor %}
 </div>
 
-
-
-
-<p>
-    {{ b.title }}
-</p>
 
 {% endblock content %}
