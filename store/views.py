@@ -216,6 +216,59 @@ class PaymentBookView(LoginRequiredMixin, View, BasePayment):
         )
 
         return self._redirect_or_json(request, "s.payment.success", payment_id=payment.id)
+    
+# Procesa la compra de un Producto
+class PaymentProductView(LoginRequiredMixin, View, BasePayment):
+    def __init__(self):
+        BasePayment.__init__(self)
+        
+    def _redirect_or_json(self, request, url_name, **kwargs):
+        url = reverse(url_name, kwargs=kwargs)
+        if request.headers.get("Content-Type") == "application/json":
+            return JsonResponse({"redirect": url})
+        return redirect(url, **kwargs)
+    
+    def get(self, request, order_id:str, product_id:int, type:str):
+        return self._process(request, order_id, product_id, type)
+    
+    def post(self, request, order_id:str, product_id:int, type:str):
+        return self._process(request, order_id, product_id, type) 
+    
+    def _process(self, request, order_id:str, product_id:int, type:str):
+     
+        # si la ordenID en la URL no es valida, lo busca en el request, caso Stripe   
+        # http://127.0.0.1:8000/store/payment/orderID/2/stripe?order_id=cs_test_a***pR
+        if order_id == 'orderID':
+            order_id = request.GET.get('order_id', '')
+            if not order_id:
+                return self._redirect_or_json(request, "s.payment.error", message_error=_("Not Order Found"))
+     
+        # procesamos la orden
+        response = self.process_order(order_id, type)
+
+        # Error en la orden
+        if response == False:
+            return self._redirect_or_json(request, "s.payment.error", message_error=self.message_error)
+        
+        #usuario auth
+        user = request.user 
+        
+        # buscamos el producto
+        product = get_object_or_404(Product, id=product_id)
+
+        # creamos el producto si todo esta ok
+        payment = Payment.objects.create(
+            user=user,
+            type=self.type,  
+            coupon=None,  
+            orderId=order_id,
+            price=self.price,
+            trace=self.trace,  
+            content_type=ContentType.objects.get_for_model(product),
+            object_id=product.id
+        )
+
+        return self._redirect_or_json(request, "s.payment.success", payment_id=payment.id)
 
 # STRIPE Helper View
 class StripeView(LoginRequiredMixin, View, BasePayment):

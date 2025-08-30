@@ -62,8 +62,6 @@ class Book(ProductAbstract):
     image = models.FileField(upload_to=upload_to_path, null=True, blank=True)
     page = models.PositiveIntegerField(default=0)
 
-
-
 class Payment(models.Model):
     
     PAYMENT_CHOICES = [
