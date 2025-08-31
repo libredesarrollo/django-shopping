@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import BookIndex, BookShow, ProductIndex, ProductShow, PaymentBookView, PaymentProductView, StripeView, PaymentSuccessView, PaymentCancelView, PaymentErrorView, UserPaymentsView
+from .views import BookIndex, BookShow, ProductIndex, ProductShow, PaymentBookView, PaymentProductView, StripeView, PaymentSuccessView, PaymentCancelView, PaymentErrorView, UserPaymentsView, ProductIndexByType
 
 # from . import views
 
@@ -10,7 +10,8 @@ urlpatterns = [
     path('book/<slug:slug>', BookShow.as_view(), name='s.b.show'),
     # listado y detalle Product
     path('product', ProductIndex.as_view(), name='s.p.index'),
-    path('product/<slug:slug>', ProductShow.as_view(), name='s.p.show'),
+    # path('product/<slug:slug>', ProductShow.as_view(), name='s.p.show'),
+    path('product/<slug:slug>/', ProductIndexByType.as_view(), name='s.p.show'),
     # path('product/<slug:type>', ProductIndex.as_view(), name='s.p.index'),
     # path('product/<slug:type>/<slug:slug>', ProductShow.as_view(), name='s.p.show'),
     # pagar un producto/book

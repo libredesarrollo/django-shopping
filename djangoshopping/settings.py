@@ -53,7 +53,8 @@ INSTALLED_APPS = [
 #Tailwind
 TAILWIND_APP_NAME = 'theme'
 
-NPM_BIN_PATH = os.environ.get('NPM_BIN_PATH', 'npm')
+NPM_BIN_PATH = 'C:/Users/andre/.config/herd/bin/nvm/v23.11.0/npm.cmd'
+# NPM_BIN_PATH = os.environ.get('NPM_BIN_PATH', 'npm')
 # if platform.system() == "Windows":
 #     NPM_BIN_PATH = "C:/Users/andre/.config/herd/bin/nvm/v23.11.0/npm.cmd"
 
@@ -73,12 +74,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
 # CKEDITOR
 
 #PayPal
-PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID', '<YOUR_PRO_PAYPAL_CLIENT_ID>')
-PAYPAL_SECRET = os.environ.get('PAYPAL_SECRET', '<YOUR_PRO_PAYPAL_SECRET>')
+PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID', 'ARYwUX89lCet9zZRP5U-px8Btet5wVYIuTv8LVLOSNwMdg3ofVn9uE4vTFTiXw0Cxti0jrRNS6eYQAV0')
+PAYPAL_SECRET = os.environ.get('PAYPAL_SECRET', 'EFZUcwzBNOcDP7XUeUNaR4yR7fA_pPM1K6s02LP8TogupuLGnU49c87lZNEc93fV45Hax7LdqTRN-LA0')
 
 #Stripe
-STRIPE_KEY = os.environ.get('STRIPE_KEY', '<YOUR_PRO_STRIPE_KEY>')
-STRIPE_SECRET = os.environ.get('STRIPE_SECRET', '<YOUR_PRO_STRIPE_SECRET>')
+STRIPE_KEY = os.environ.get('STRIPE_KEY', 'pk_test_51QTMqcEHJX14M8EE1DQU3xh1RtY0gd2IP6Ie5NGkPV1mVYA7XsmJ2yiNwze5FahYJ1KLYRftqBCsjKWGZE6Bzktg00O4Qojj8C')
+STRIPE_SECRET = os.environ.get('STRIPE_SECRET', 'sk_test_51QTMqcEHJX14M8EEL0ZbpBwsH5iAnHn6Am1HzExVgOMrgQpdpithk8z2o6iVzaqRV6PQVNHw1oK4uKE8U0llui3800pP9vCanl')
+# #PayPal
+# PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID', '<YOUR_PRO_PAYPAL_CLIENT_ID>')
+# PAYPAL_SECRET = os.environ.get('PAYPAL_SECRET', '<YOUR_PRO_PAYPAL_SECRET>')
+
+# #Stripe
+# STRIPE_KEY = os.environ.get('STRIPE_KEY', '<YOUR_PRO_STRIPE_KEY>')
+# STRIPE_SECRET = os.environ.get('STRIPE_SECRET', '<YOUR_PRO_STRIPE_SECRET>')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

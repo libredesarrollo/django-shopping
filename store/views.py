@@ -16,7 +16,7 @@ from django.urls import reverse
 import stripe
 
 from blog.models import Category, Tag
-from .models import Book, Product, Payment
+from .models import Book, Product, Payment, ProductType
 from .utils.payment import BasePayment
 
 from django.contrib.contenttypes.models import ContentType
@@ -130,6 +130,17 @@ class ProductIndex(ListView):
         context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID
         
         return context
+
+#******** Listado de Products por tipo producto     
+class ProductIndexByType(ListView):
+    model = Product
+    context_object_name = 'products'
+    template_name = 'store/product/index.html'
+    paginate_by = 15
+
+    def get_queryset(self):
+        slug = self.kwargs.get("slug")
+        return Product.objects.filter(product_type__slug=slug)
     
 # Detalle del pago    
 class ProductShow(DetailView):
