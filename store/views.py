@@ -21,6 +21,10 @@ from .utils.payment import BasePayment
 
 from django.contrib.contenttypes.models import ContentType
 
+from abc import ABC
+
+# Configuracion de Stripe
+
 stripe.api_key = settings.STRIPE_SECRET
 
 # Listado de libros
@@ -85,7 +89,7 @@ class BookShow(DetailView):
         return context
     
 #******** Listado/Detalle de Products
-class ProductIndex(ListView):
+class ProductIndexAbstract(ListView, ABC):
     model = Product
     context_object_name = 'products'
     template_name = 'store/product/index.html'
@@ -128,21 +132,21 @@ class ProductIndex(ListView):
         context['categories'] = Category.objects.all()
         context['tags'] = Tag.objects.all()
         context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID
-        
+     
         return context
+    
+class ProductIndex(ProductIndexAbstract):
+    pass
 
 #******** Listado de Products por tipo producto     
-class ProductIndexByType(ListView):
-    model = Product
-    context_object_name = 'products'
-    template_name = 'store/product/index.html'
-    paginate_by = 15
+class ProductIndexByType(ProductIndexAbstract):
 
     def get_queryset(self):
+        queryset = super().get_queryset()
         slug = self.kwargs.get("slug")
-        return Product.objects.filter(product_type__slug=slug)
+        return queryset.filter(product_type__slug=slug)
     
-# Detalle del pago    
+# Detalle del producto    
 class ProductShow(DetailView):
     model=Product
     context_object_name='product'
@@ -155,6 +159,16 @@ class ProductShow(DetailView):
         context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID     
         context['stripe_key'] = settings.STRIPE_KEY     
         return context    
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        product_slug = self.kwargs.get("slug")
+        type_slug = self.kwargs.get("type")
+        
+        return queryset.filter(
+            slug=product_slug,
+            product_type__slug=type_slug
+        )
 
 # listado de pagos del usuario        
 class UserPaymentsView(LoginRequiredMixin, ListView):

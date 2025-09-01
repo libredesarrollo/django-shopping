@@ -62,7 +62,7 @@
                 </div>
                 <!-- Ver el detalle -->
                 <p class="text-center mt-4">
-                    <a variant='primary' class="btn btn-success" href="{% url 's.p.show' p.slug %}">
+                    <a variant='primary' class="btn btn-success" href="{% url 's.p.show' p.product_type.slug p.slug %}">
                         {{ _('Show') }} </a> 
                 </p>
             </div>
