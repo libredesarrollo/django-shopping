@@ -23,11 +23,20 @@
                 <div class="flex-row hidden md:flex uppercase font-bold justify-center">
                     <a href="{% url 'b.index' %}"
                         class="text-center dark:text-white px-2 py-1 italic hover:-translate-y-1 transition-all">
-                        Blog
+                        {{ _('Blog') }}
                     </a>
                     <a href="{% url 's.b.index' %}"
                         class="text-center dark:text-white px-2 py-1 italic hover:-translate-y-1 transition-all">
-                        Store Book
+                        {{ _('Store Book') }}
+                        
+                    </a>
+                    <a href="{% url 's.p.index' %}"
+                        class="text-center dark:text-white px-2 py-1 italic hover:-translate-y-1 transition-all">
+                         {{ _('Store') }}
+                    </a>
+                    <a href="{% url 's.p.t.index' 'escritorios' %}"
+                        class="text-center dark:text-white px-2 py-1 italic hover:-translate-y-1 transition-all">
+                        {{ _('Desks') }}
                     </a>
                    
                 </div>

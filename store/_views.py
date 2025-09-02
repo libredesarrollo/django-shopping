@@ -16,7 +16,7 @@ from django.urls import reverse
 import stripe
 
 from blog.models import Category, Tag
-from .models import Book, Product, Payment, ProductType
+from .models import Book, Product, Payment
 from .utils.payment import BasePayment
 
 from django.contrib.contenttypes.models import ContentType
