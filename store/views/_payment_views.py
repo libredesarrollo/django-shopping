@@ -30,29 +30,29 @@ class UserPaymentsView(LoginRequiredMixin, ListView):
             .order_by("-created_at")
         )
     
-# Procesa el pago
-class BasePaymentView(LoginRequiredMixin, View, BasePayment):
-    model = None          # el modelo (Book o Product)
-    lookup_field = "id"   # campo de búsqueda (generalmente id)
-    url_kwarg = None      # el parámetro en la URL (book_id, product_id)
-
+# Procesa la compra de un Producto/Libro
+class PaymentBookView(LoginRequiredMixin, View, BasePayment):
     def __init__(self):
+        # super().__init__()
         BasePayment.__init__(self)
-
+        
     def _redirect_or_json(self, request, url_name, **kwargs):
         url = reverse(url_name, kwargs=kwargs)
         if request.headers.get("Content-Type") == "application/json":
             return JsonResponse({"redirect": url})
         return redirect(url, **kwargs)
-
-    def get(self, request, order_id: str, type: str, **kwargs): # parametro extra (**kwargs) que es el de <int:product_id>/<int:book_id>
-        return self._process(request, order_id, type, **kwargs) 
-
-    def post(self, request, order_id: str, type: str, **kwargs): # parametro extra (**kwargs) que es el de <int:product_id>/<int:book_id>
-        return self._process(request, order_id, type, **kwargs)
-
-    def _process(self, request, order_id: str, type: str, **kwargs):
-        # si la ordenID en la URL no es valida, lo busca en el request (caso Stripe)   
+    
+    def get(self, request, order_id:str, book_id:int, type:str):
+        return self._process(request, order_id, book_id, type)
+    
+    def post(self, request, order_id:str, book_id:int, type:str):
+        return self._process(request, order_id, book_id, type) 
+    
+    def _process(self, request, order_id:str, book_id:int, type:str):
+        #TODO revisar que NO compre el mismo producto 2 veces
+     
+        # si la ordenID en la URL no es valida, lo busca en el request, caso Stripe   
+        # http://127.0.0.1:8000/store/payment/orderID/2/stripe?order_id=cs_test_a***pR
         if order_id == 'orderID':
             order_id = request.GET.get('order_id', '')
             if not order_id:
@@ -60,39 +60,86 @@ class BasePaymentView(LoginRequiredMixin, View, BasePayment):
      
         # procesamos la orden
         response = self.process_order(order_id, type)
-        if response is False:
+
+        # Error en la orden
+        if response == False:
             return self._redirect_or_json(request, "s.payment.error", message_error=self.message_error)
-
-        # usuario auth
+        
+        #usuario auth
         user = request.user 
+        
+        # buscamos el producto
+        try:
+            book = Book.objects.get(id=book_id)
+        except Book.DoesNotExist:
+            return self._redirect_or_json(request, "s.payment.error", message_error=_("Not Book Found"))
 
-        # buscamos el objeto parametro extra <int:product_id>/<int:book_id>
-        pk = kwargs.get(self.url_kwarg)
-        obj = get_object_or_404(self.model, **{self.lookup_field: pk})
-
-        # creamos el payment
+        # creamos el producto si todo esta ok
         payment = Payment.objects.create(
             user=user,
-            type=self.type,
-            coupon=None,
+            type=self.type,  
+            coupon=None,  
             orderId=order_id,
             price=self.price,
-            trace=self.trace,
-            content_type=ContentType.objects.get_for_model(obj),
-            object_id=obj.id
+            trace=self.trace,  
+            content_type=ContentType.objects.get_for_model(book),
+            object_id=book.id
         )
 
         return self._redirect_or_json(request, "s.payment.success", payment_id=payment.id)
-
-# Procesa la compra de un Libro
-class PaymentBookView(BasePaymentView):
-    model = Book
-    url_kwarg = "book_id"
-
+    
 # Procesa la compra de un Producto
-class PaymentProductView(BasePaymentView):
-    model = Product
-    url_kwarg = "product_id"
+class PaymentProductView(LoginRequiredMixin, View, BasePayment):
+    def __init__(self):
+        BasePayment.__init__(self)
+        
+    def _redirect_or_json(self, request, url_name, **kwargs):
+        url = reverse(url_name, kwargs=kwargs)
+        if request.headers.get("Content-Type") == "application/json":
+            return JsonResponse({"redirect": url})
+        return redirect(url, **kwargs)
+    
+    def get(self, request, order_id:str, product_id:int, type:str):
+        return self._process(request, order_id, product_id, type)
+    
+    def post(self, request, order_id:str, product_id:int, type:str):
+        return self._process(request, order_id, product_id, type) 
+    
+    def _process(self, request, order_id:str, product_id:int, type:str):
+     
+        # si la ordenID en la URL no es valida, lo busca en el request, caso Stripe   
+        # http://127.0.0.1:8000/store/payment/orderID/2/stripe?order_id=cs_test_a***pR
+        if order_id == 'orderID':
+            order_id = request.GET.get('order_id', '')
+            if not order_id:
+                return self._redirect_or_json(request, "s.payment.error", message_error=_("Not Order Found"))
+     
+        # procesamos la orden
+        response = self.process_order(order_id, type)
+
+        # Error en la orden
+        if response == False:
+            return self._redirect_or_json(request, "s.payment.error", message_error=self.message_error)
+        
+        #usuario auth
+        user = request.user 
+        
+        # buscamos el producto
+        product = get_object_or_404(Product, id=product_id)
+
+        # creamos el producto si todo esta ok
+        payment = Payment.objects.create(
+            user=user,
+            type=self.type,  
+            coupon=None,  
+            orderId=order_id,
+            price=self.price,
+            trace=self.trace,  
+            content_type=ContentType.objects.get_for_model(product),
+            object_id=product.id
+        )
+
+        return self._redirect_or_json(request, "s.payment.success", payment_id=payment.id)
 
 # STRIPE Helper View
 class StripeView(LoginRequiredMixin, View, BasePayment):
