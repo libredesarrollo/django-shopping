@@ -25,4 +25,6 @@ urlpatterns = [
     path("blog/", include('blog.urls')),
     path("store/", include('store.urls')),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
+    # django auth all
+    path('accounts/', include('allauth.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
