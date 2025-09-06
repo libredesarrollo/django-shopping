@@ -38,37 +38,44 @@
     </div>
 </section>
 
-<div class="grid xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-5">
-    {% for p in products %}
-        <div class="flex flex-col border rounded-lg shadow p-4 dark:border-white">
-            {% if p.image %}
-                <img class="post" alt="{{ p.title }}" title="{{ p.title }}" src="{{ p.getImageUrl }}" />
-            {% endif %}
-            <div class="mt-4">
-                <h3 class="uppercase text-center mt-2 text-lg font-semibold min-h-[3.5rem] mb-0 dark:text-white">{{ p.title }}</h3>
-            </div>
+{% load check_if_exists %}
 
-            <div class="flex flex-col sm:mx-2 text-xl grow">
-                <!-- Enlace a todos los product -->
-                <div class="flex grow">
-             
-                    <div class="grow">
-                        <!-- Para que vaya a la izquierda -->
-                    </div>
-
-                    <span class="text-left font-semibold text-green-700">
-                        {{ p.price_offert }}$
-                    </span>
+{% if product_type %}
+    {% check_if_exists template_path as exists %}
+    {% if exists %}
+        {% include template_path %}
+    {% else %}
+        <div class="grid xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-5">
+        {% for p in products %}
+            <div class="flex flex-col border rounded-lg shadow p-4 dark:border-white">
+                {% if p.image %}
+                    <img class="post" alt="{{ p.title }}" title="{{ p.title }}" src="{{ p.getImageUrl }}" />
+                {% endif %}
+                <div class="mt-4">
+                    <h3 class="uppercase text-center mt-2 text-lg font-semibold min-h-[3.5rem] mb-0 dark:text-white">{{ p.title }}</h3>
                 </div>
-                <!-- Ver el detalle -->
-                <p class="text-center mt-4">
-                    <a variant='primary' class="btn btn-success" href="{% url 's.p.show' p.product_type.slug p.slug %}">
-                        {{ _('Show') }} </a> 
-                </p>
+
+                <div class="flex flex-col sm:mx-2 text-xl grow">
+                    <!-- Enlace a todos los product -->
+                    <div class="flex grow">
+                
+                        <div class="grow">
+                            <!-- Para que vaya a la izquierda -->
+                        </div>
+
+                        <span class="text-left font-semibold text-green-700">
+                            {{ p.price_offert }}$
+                        </span>
+                    </div>
+                    <!-- Ver el detalle -->
+                    <p class="text-center mt-4">
+                        <a variant='primary' class="btn btn-success" href="{% url 's.p.show' p.product_type.slug p.slug %}">
+                            {{ _('Show') }} </a> 
+                    </p>
+                </div>
             </div>
-        </div>
-    {% endfor %}
-</div>
-
-
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endif %}
 {% endblock content %}

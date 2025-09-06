@@ -6,7 +6,7 @@ from django.utils.dateparse import parse_date
 from django.utils.translation import gettext_lazy as _
 
 from blog.models import Category, Tag
-from ..models import Product
+from ..models import Product, ProductType
 
 from abc import ABC
 
@@ -68,6 +68,12 @@ class ProductIndexByType(ProductIndexAbstract):
         slug = self.kwargs.get("slug")
         return queryset.filter(product_type__slug=slug)
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        productType = context['product_type'] = ProductType.objects.filter(slug=self.kwargs.get("slug")).get()
+        context["template_path"] = f"store/product/partials/list/{productType.slug}.html"
+        return context
+    
 # Detalle del producto    
 class ProductShow(DetailView):
     model=Product
@@ -78,8 +84,10 @@ class ProductShow(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        product = self.object  # Obtienes la instancia del producto
         context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID     
         context['stripe_key'] = settings.STRIPE_KEY     
+        context["template_path"] = f"store/product/partials/detail/{product.product_type.slug}.html"
         return context    
     
     def get_queryset(self):

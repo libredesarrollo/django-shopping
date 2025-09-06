@@ -2,7 +2,12 @@
 
 {% block content %}
     <div class="post prose-lg mb-3">
-        
+    {% load check_if_exists %}
+
+    {% check_if_exists template_path as exists %}
+    {% if exists %}
+        {% include template_path %}
+    {% else %}
         <h1 class="text-center !mb-0">{{ product.title }}</h1>
         <p class="text-center text-xl !text-gray-400">{{ product.subtitle }}</p>
 
@@ -43,4 +48,6 @@
             </div>
         </section>
     </div>
+    {% endif %}
+
 {% endblock content %}
