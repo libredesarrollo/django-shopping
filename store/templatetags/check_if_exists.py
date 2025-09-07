@@ -7,7 +7,7 @@ register = template.Library()
 @register.simple_tag
 def check_if_exists(template_name):
     try:
-        t = get_template(template_name)
+        get_template(template_name)
         return True
     except TemplateDoesNotExist:
         return False

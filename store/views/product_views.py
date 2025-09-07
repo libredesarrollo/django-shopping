@@ -70,8 +70,8 @@ class ProductIndexByType(ProductIndexAbstract):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        productType = context['product_type'] = ProductType.objects.filter(slug=self.kwargs.get("slug")).get()
-        context["template_path"] = f"store/product/partials/list/{productType.slug}.html"
+        product_type = ProductType.objects.filter(slug=self.kwargs.get("slug")).get()
+        context["template_path"] = f"store/product/partials/list/{product_type.slug}.html"
         return context
     
 # Detalle del producto    
