@@ -77,8 +77,12 @@ class Payment(models.Model):
     trace = models.CharField(max_length=2000)
     created_at = models.DateTimeField(auto_now_add=True)
     
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    content_type = models.ForeignKey(
+        ContentType, on_delete=models.CASCADE,
+        limit_choices_to=models.Q(model='product') | models.Q(model='book')
+    )
     object_id = models.PositiveIntegerField()
+    
     paymentable = GenericForeignKey('content_type', 'object_id')
 
     def __str__(self):

@@ -2,6 +2,8 @@
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
+import logging
+
 import stripe
 import requests
 
@@ -14,6 +16,8 @@ stripe.api_key = settings.STRIPE_SECRET
 
 from abc import ABC
 from typing import Optional
+
+logger = logging.getLogger(__name__)
 
 class AbstractPayment(ABC):
     status: Optional[str] = None
@@ -88,6 +92,7 @@ class PaymentPaypalClient(AbstractPayment):
             return True
         except Exception as e:
             self.message_error = str(e)
+            logger.error(f"Error en PayPal process order: {e}", exc_info=True)
             return False
 
     def get_access_token(self) -> str:

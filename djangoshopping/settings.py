@@ -184,3 +184,28 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # importante para que Django siga mandando logs
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] {levelname} {name}: {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            # 'level': 'DEBUG',  # captura todo desde DEBUG hasta ERROR
+            'level': 'ERROR',  # captura todo desde DEBUG hasta ERROR
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),  # archivo único
+            'formatter': 'verbose',
+        },
+    },
+    'root': {   # <-- logger global
+        'handlers': ['file'],
+        'level': 'DEBUG',
+    },
+}

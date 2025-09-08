@@ -1,0 +1,48 @@
+<h1 class="text-center !mb-0">{{ product.title }}</h1>
+<p class="text-center text-xl !text-gray-400 mt-2">{{ product.subtitle }}</p>
+
+{% if product.image %}
+    <img class="post" alt="{{ product.title }}" title="{{ product.title }}"
+            src="{{ product.get_image_url }}">
+{% endif %}
+
+<div class="flex flex-row gap-5 justify-center">
+    <p class="font-bold text-green-700 m-0!">
+        {{ product.price_offert }}$
+    </p>
+    <div class="flex flex-wrap gap-2">
+        <div>
+            <a class="btn-sm btn-success" target="_blank"  href="{% url 'b.index' %}?category_id={{ product.post.category.id }}">
+                {{ product.post.category.title }}
+            </a>
+        </div>
+        {% for t in product.tags.all %}
+            <a class="btn-sm btn-success-border" target="_blank"
+                href="{% url 's.b.index' tag_id=t.id %}">
+                {{ t.title }}
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+<hr class="my-3 dark:text-white">
+
+<section class="mycard mx-auto">
+    <div class="mycard-body">
+        {{ product.content|safe }}
+    </div>
+</section>
+
+<hr class="my-8 dark:text-white">
+
+            {% include "fragment/payment/helper.html" with base_payment_url_name='s.product.payment'  %}
+        </div>
+    </div>
+
+    <hr class="my-3 dark:text-white">
+    <section class="mycard mx-auto">
+        <div class="mycard-body">
+            {{ product.content|safe }}
+        </div>
+    </section>
+</div>

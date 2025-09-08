@@ -2,8 +2,9 @@ from django.contrib import admin
 from django import forms
 
 from django.contrib.contenttypes.admin import GenericTabularInline
+from django.contrib.contenttypes.models import ContentType
 
-from .models import Book, Product, ProductType
+from .models import Book, Product, ProductType, Payment
 from blog.models import Taggable
 
 class BookForm(forms.ModelForm):
@@ -26,7 +27,8 @@ class BookAdmin(admin.ModelAdmin):
     form = BookForm
     
     
-# tipo producto
+#**** tipo producto
+# producto
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
@@ -40,10 +42,16 @@ class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',) }
     inlines = [TaggableInline]
     form = ProductForm
-
+    
+# tipo producto
 @admin.register(ProductType)
 class ProductTypeAdmin(admin.ModelAdmin):
     list_display = ('id', 'title')
     prepopulated_fields = {'slug': ('title',) }
-    
 # admin.site.register(ProductType, ProductTypeAdmin)
+
+
+#**** producto
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'orderId', 'price')
