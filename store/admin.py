@@ -50,8 +50,15 @@ class ProductTypeAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',) }
 # admin.site.register(ProductType, ProductTypeAdmin)
 
-
 #**** producto
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'orderId', 'price')
+    list_display = ('id','created_at', 'user', 'short_orderId','type', 'price')
+    list_filter = ('user', 'type')
+    search_fields = ('id', 'user__username', 'type', 'trace', 'orderId') 
+    
+    def short_orderId(self, obj):
+        if obj.orderId:  # suponiendo que tu campo se llama trace
+            return (obj.orderId[:20] + '...') if len(obj.orderId) > 20 else obj.orderId
+        return ''
+    short_orderId.short_description = "orderId"

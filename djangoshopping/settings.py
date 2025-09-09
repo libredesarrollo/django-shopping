@@ -206,6 +206,6 @@ LOGGING = {
     },
     'root': {   # <-- logger global
         'handlers': ['file'],
-        'level': 'DEBUG',
+        'level': 'ERROR',
     },
 }

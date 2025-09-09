@@ -113,6 +113,7 @@ class PaymentPaypalClient(AbstractPayment):
             response.raise_for_status()
         except Exception as e:
             self.message_error = str(e)
+            logger.error(f"Error en PayPal process order: {e}", exc_info=True)
             return ""
         return response.json().get("access_token")
 
@@ -145,6 +146,7 @@ class PaymentStripeClient(AbstractPayment):
             )
             return checkout_session.id
         except Exception as e:
+            logger.error(f"Error en Stripe process order: {e}", exc_info=True)
             self.message_error = str(e)
             return ""
 
@@ -161,6 +163,7 @@ class PaymentStripeClient(AbstractPayment):
                 self.price = session.amount_total // 100
 
         except stripe.error.StripeError as e:
+            logger.error(f"Error en Stripe process order: {e}", exc_info=True)
             self.message_error = str(e)
             return False
         

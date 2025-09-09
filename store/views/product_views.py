@@ -10,9 +10,6 @@ from ..models import Product, ProductType
 
 from abc import ABC
 
-import logging
-logger = logging.getLogger(__name__)
-
 #******** Listado/Detalle de Products
 class ProductIndexAbstract(ListView, ABC):
     model = Product
@@ -69,8 +66,6 @@ class ProductIndexByType(ProductIndexAbstract):
     def get_queryset(self):
         queryset = super().get_queryset()
         slug = self.kwargs.get("slug")
-        print('******')
-        # logger.error(f"Error en PayPal process order:", exc_info=True)
         return queryset.filter(product_type__slug=slug)
     
     def get_context_data(self, **kwargs):
