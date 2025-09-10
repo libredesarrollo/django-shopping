@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static tailwind_tags %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog</title>
     {% tailwind_css %}
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
-    {% comment %} <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> {% endcomment %}
+    {% comment %}
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> {% endcomment %}
 </head>
 
 <body>
@@ -29,26 +31,44 @@
                     <a href="{% url 's.b.index' %}"
                         class="text-center dark:text-white px-2 py-1 italic hover:-translate-y-1 transition-all">
                         {{ _('Store Book') }}
-                        
+
                     </a>
                     <a href="{% url 's.p.index' %}"
                         class="text-center dark:text-white px-2 py-1 italic hover:-translate-y-1 transition-all">
-                         {{ _('Store') }}
+                        {{ _('Store') }}
                     </a>
                     <a href="{% url 's.p.t.index' 'desks' %}"
                         class="text-center dark:text-white px-2 py-1 italic hover:-translate-y-1 transition-all">
                         {{ _('Desks') }}
                     </a>
-                   
                 </div>
-
+                {% if user.is_authenticated %}
+                <a href="{% url 'user.profile' %}" class="ml-2 mb-2 inline-block">
+                    <div class="w-7 h-7 rounded-full bg-gray-600 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-4 text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                        </svg>
+                    </div>
+                </a>
+                {% else %}
+                <a href="{% url 'account_login' %}" class="ml-2 mb-2 inline-block">
+                    <div class="w-7 h-7 rounded-full bg-gray-600 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-4 text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
+                        </svg>
+                    </div>
+                </a>
+                {% endif %}
                 <div>
                     {# ADD Something #}
                 </div>
                 {# mobile menu #}
                 <div class="flex md:hidden ml-auto">
-                    <button aria-label="Menú hamburguesa" title='Menú hamburguesa' @click="open = ! open"
-                        class="p-2">
+                    <button aria-label="Menú hamburguesa" title='Menú hamburguesa' @click="open = ! open" class="p-2">
                         <svg class="h-6 w-6 dark:text-white text-black" stroke="currentColor" fill="none"
                             viewBox="0 0 24 24">
                             {# bar #}

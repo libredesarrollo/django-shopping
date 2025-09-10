@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("blog/", include('blog.urls')),
     path("store/", include('store.urls')),
+    path("accounts/", include('user.urls')),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
     # django auth all
     path('accounts/', include('allauth.urls')),
