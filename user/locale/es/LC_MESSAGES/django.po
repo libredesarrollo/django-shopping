@@ -1,0 +1,106 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-13 05:48-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+#: .\user\templates\account\login.html:6 .\user\templates\account\login.html:23
+#: .\user\templates\account\login.html:43
+#: .\user\templates\account\signup.html:6
+#: .\user\templates\account\signup.html:22
+#: .\user\templates\account\signup.html:42
+#: .\user\templates\allauth\templates\allauth\layouts\_base.html:70
+msgid "Sign In"
+msgstr ""
+
+#: .\user\templates\account\login.html:26
+#: .\user\templates\account\signup.html:25
+#, python-format
+msgid ""
+"If you have not created an account yet, then please \n"
+"                <a href=\"%(signup_url)s\" class=\"font-medium text-"
+"indigo-600 hover:text-indigo-500\">\n"
+"                    sign up\n"
+"                </a> first."
+msgstr ""
+
+#: .\user\templates\account\login.html:55
+#: .\user\templates\account\signup.html:54
+msgid "Or continue with"
+msgstr ""
+
+#: .\user\templates\account\login.html:63
+#: .\user\templates\account\signup.html:62
+msgid "Sign in with a passkey"
+msgstr ""
+
+#: .\user\templates\account\login.html:69
+#: .\user\templates\account\signup.html:68
+msgid "Send me a sign-in code"
+msgstr ""
+
+#: .\user\templates\account\profile.html:7
+msgid "Email"
+msgstr ""
+
+#: .\user\templates\account\profile.html:14
+msgid "Language"
+msgstr ""
+
+#: .\user\templates\account\profile.html:28
+msgid "Logout"
+msgstr ""
+
+#: .\user\templates\account\profile.html:30
+msgid "My Buyed"
+msgstr ""
+
+#: .\user\templates\allauth\templates\allauth\layouts\_base.html:20
+msgid "Messages:"
+msgstr ""
+
+#: .\user\templates\allauth\templates\allauth\layouts\_base.html:27
+msgid "Menu:"
+msgstr ""
+
+#: .\user\templates\allauth\templates\allauth\layouts\_base.html:33
+msgid "Change Email"
+msgstr ""
+
+#: .\user\templates\allauth\templates\allauth\layouts\_base.html:39
+msgid "Change Password"
+msgstr ""
+
+#: .\user\templates\allauth\templates\allauth\layouts\_base.html:45
+msgid "Account Connections"
+msgstr ""
+
+#: .\user\templates\allauth\templates\allauth\layouts\_base.html:51
+msgid "Two-Factor Authentication"
+msgstr ""
+
+#: .\user\templates\allauth\templates\allauth\layouts\_base.html:57
+msgid "Sessions"
+msgstr ""
+
+#: .\user\templates\allauth\templates\allauth\layouts\_base.html:63
+msgid "Sign Out"
+msgstr ""
+
+#: .\user\templates\allauth\templates\allauth\layouts\_base.html:76
+msgid "Sign Up"
+msgstr ""

@@ -18,6 +18,18 @@ import platform
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+#Language
+LANGUAGE_CODE = 'en'   # Idioma por defecto
+LANGUAGES = [
+    ('en', 'English'),
+    ('es', 'Español'),
+]
+# Carpeta donde se guardarán las traducciones
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+#Language
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
