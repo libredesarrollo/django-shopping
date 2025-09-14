@@ -20,20 +20,20 @@ msgstr ""
 "1 : 2;\n"
 #: .\blog\templates\master.html:30 .\blog\templates\master.html:90
 msgid "Blog"
-msgstr ""
+msgstr "Blog"
 
 #: .\blog\templates\master.html:34
 msgid "Store Book"
-msgstr ""
+msgstr "Libro de la Tienda"
 
 #: .\blog\templates\master.html:39
 msgid "Store"
-msgstr ""
+msgstr "Tienda"
 
 #: .\blog\templates\master.html:43
 msgid "Desks"
-msgstr ""
+msgstr "Escritorios"
 
 #: .\blog\templates\post\index.html:83
 msgid "Show"
-msgstr ""
+msgstr "Mostrar"

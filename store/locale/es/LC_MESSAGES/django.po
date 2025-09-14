@@ -22,105 +22,105 @@ msgstr ""
 #: .\store\views\_payment_views.py:59 .\store\views\_payment_views.py:115
 #: .\store\views\payment_views.py:59
 msgid "Not Order Found"
-msgstr ""
+msgstr "No se encontró la orden"
 
 #: .\store\_views.py:229 .\store\_views.py:309
 #: .\store\views\_payment_views.py:75 .\store\views\_payment_views.py:155
 #: .\store\views\payment_views.py:108
 msgid "Not Book Found"
-msgstr ""
+msgstr "No se encontró el libro"
 
 #: .\store\templates\fragment\_need_login.html:2
 msgid "You need login to buy"
-msgstr ""
+msgstr "Necesitas iniciar sesión para comprar"
 
 #: .\store\templates\fragment\_need_login.html:3
 msgid "Login"
-msgstr ""
+msgstr "Iniciar Sesión"
 
 #: .\store\templates\fragment\payment\index.html:19
 msgid "Processing"
-msgstr ""
+msgstr "Procesando"
 
 #: .\store\templates\fragment\payment\index.html:23
 msgid "Or"
-msgstr ""
+msgstr "O"
 
 #: .\store\templates\fragment\payment\index.html:27
 msgid "You will be charged"
-msgstr ""
+msgstr "Se te cobrará"
 
 #: .\store\templates\store\book\index.html:68
 #: .\store\templates\store\product\index.html:74
 #: .\store\templates\store\product\partials\list\desks.html:24
 msgid "Show"
-msgstr ""
+msgstr "Mostrar"
 
 #: .\store\templates\store\book\show.html:19
 msgid "Pages"
-msgstr ""
+msgstr "Páginas"
 
 #: .\store\templates\store\payments\cancel.html:8
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: .\store\templates\store\payments\cancel.html:12
 msgid "If you have any questions"
-msgstr ""
+msgstr "Si tienes alguna pregunta"
 
 #: .\store\templates\store\payments\cancel.html:14
 #: .\store\templates\store\payments\error.html:18
 msgid "Contact"
-msgstr ""
+msgstr "Contacto"
 
 #: .\store\templates\store\payments\error.html:8
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 #: .\store\templates\store\payments\error.html:16
 msgid "An error occurred while making the payment. If you have any questions"
-msgstr ""
+msgstr "Ocurrió un error al realizar el pago. Si tienes alguna pregunta"
 
 #: .\store\templates\store\payments\success.html:12
 msgid "Thank you for purchasing"
-msgstr ""
+msgstr "Gracias por tu compra"
 
 #: .\store\templates\store\payments\success.html:16
 msgid "You can download from"
-msgstr ""
+msgstr "Puedes descargarlo desde"
 
 #: .\store\templates\store\payments\success.html:18
 msgid "Download"
-msgstr ""
+msgstr "Descargar"
 
 #: .\store\templates\store\payments\success.html:27
 msgid "Purchase information"
-msgstr ""
+msgstr "Información de la compra"
 
 #: .\store\templates\store\payments\success.html:31
 msgid "Payment Id"
-msgstr ""
+msgstr "Id de pago"
 
 #: .\store\templates\store\payments\success.html:34
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: .\store\templates\store\user\payments.html:6
 msgid "User Payments"
-msgstr ""
+msgstr "Pagos de usuario"
 
 #: .\store\templates\store\user\payments.html:19
 msgid "Detail"
-msgstr ""
+msgstr "Detalle"
 
 #: .\store\templates\store\user\payments.html:24
 msgid "No payments found."
-msgstr ""
+msgstr "No se encontraron pagos."
 
 #: .\store\utils\payment.py:181
 msgid "Order Already Paid"
-msgstr ""
+msgstr "La orden ya ha sido pagada"
 
 #: .\store\utils\payment.py:191
 msgid "Invalid Type"
-msgstr ""
+msgstr "Tipo inválido"
