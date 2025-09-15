@@ -113,7 +113,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # django auth all
     "allauth.account.middleware.AccountMiddleware",
-    # 'django.middleware.locale.LocaleMiddleware', 
+    # traducciones
+    'django.middleware.locale.LocaleMiddleware', 
 ]
 
 ROOT_URLCONF = 'djangoshopping.urls'

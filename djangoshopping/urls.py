@@ -28,5 +28,5 @@ urlpatterns = [
     path("ckeditor5/", include('django_ckeditor_5.urls')),
     # django auth all
     path('accounts/', include('allauth.urls')),
-    # path('i18n/', include('django.conf.urls.i18n')), 
+    path('i18n/', include('django.conf.urls.i18n')), 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
