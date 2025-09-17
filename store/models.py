@@ -11,6 +11,8 @@ from blog.models import Post
 
 import os
 
+import uuid
+
 def upload_to_path(instance, filename):
    return os.path.join('books', instance.path, filename)
 
@@ -99,3 +101,30 @@ class ProductType(models.Model):
 class Product(ProductAbstract):
     image = models.FileField(upload_to=upload_product_to_path, null=True, blank=True)
     product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE, related_name="products")
+    
+    
+class Coupon(models.Model):
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    coupon = models.CharField(max_length=100, unique=True, blank=True)
+    
+    # Relación opcional con el usuario
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True,  blank=True)
+    
+    # Campos para relación generica
+    content_type = models.ForeignKey(
+        ContentType, on_delete=models.CASCADE,
+         null=True,  blank=True,
+        limit_choices_to=models.Q(model='product') | models.Q(model='book')
+    )
+    object_id = models.IntegerField( null=True,  blank=True)
+    couponable = GenericForeignKey('content_type', 'object_id')
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.coupon:  # si el usuario no lo dio
+            self.coupon = uuid.uuid4().hex[:10].upper()  # 10 caracteres aleatorios
+        super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.coupon

@@ -65,6 +65,8 @@ class BookShow(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        book = self.object  # Obtienes la instancia del book
+        book.price_offert = f"{book.price_offert:.2f}"   # Para evitar errores en 'es' al definir flotantes con ,
         context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID     
         context['stripe_key'] = settings.STRIPE_KEY     
         return context

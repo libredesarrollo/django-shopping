@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.contenttypes.admin import GenericTabularInline
 from django.contrib.contenttypes.models import ContentType
 
-from .models import Book, Product, ProductType, Payment
+from .models import Book, Product, ProductType, Payment, Coupon
 from blog.models import Taggable
 
 class BookForm(forms.ModelForm):
@@ -62,3 +62,10 @@ class PaymentAdmin(admin.ModelAdmin):
             return (obj.orderId[:20] + '...') if len(obj.orderId) > 20 else obj.orderId
         return ''
     short_orderId.short_description = "orderId"
+    
+    
+# Coupon
+@admin.register(Coupon)
+class CouponAdmin(admin.ModelAdmin):
+    list_display = ('id', 'price', 'coupon', 'created_at', 'coupon')
+    fields = ('price','coupon')

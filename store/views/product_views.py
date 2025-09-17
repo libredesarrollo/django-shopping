@@ -6,9 +6,12 @@ from django.utils.dateparse import parse_date
 from django.utils.translation import gettext_lazy as _
 
 from blog.models import Category, Tag
-from ..models import Product, ProductType
+from ..models import Product, ProductType, Coupon
+
+from ..utils.coupon import UtilityCoupon
 
 from abc import ABC
+
 
 #******** Listado/Detalle de Products
 class ProductIndexAbstract(ListView, ABC):
@@ -74,20 +77,38 @@ class ProductIndexByType(ProductIndexAbstract):
         context["template_path"] = f"store/product/partials/list/{product_type.slug}.html"
         return context
     
+
+    
 # Detalle del producto    
-class ProductShow(DetailView):
+class ProductShow(DetailView, UtilityCoupon):
     model=Product
     context_object_name='product'
     template_name='store/product/show.html'
     slug_field = 'slug'            
     slug_url_kwarg = 'slug'   
+    
+    def get(self, request, *args, **kwargs):
+        coupon = request.GET.get('coupon')
+        self.coupon = coupon
 
+        return super().get(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = self.object  # Obtienes la instancia del producto
+        product.price_offert = f"{product.price_offert:.2f}"   # Para evitar errores en 'es' al definir flotantes con ,
+        
         context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID     
         context['stripe_key'] = settings.STRIPE_KEY     
         context["template_path"] = f"store/product/partials/detail/{product.product_type.slug}.html"
+
+        if self.coupon:
+            self.messageCoupon = self.check_coupon(self.coupon, product.price_offert)
+            context["coupon"] = self.coupon
+            
+            print('***************'+self.coupon)
+            print('***************'+str(self.messageCoupon))
+
         return context    
     
     def get_queryset(self):
