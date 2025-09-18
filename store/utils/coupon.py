@@ -29,8 +29,6 @@ class UtilityCoupon:
 
         # 4. Aplica el cupón
         self.finalPrice = priceProduct - coupon.price
-        # Aquí puedes llamar a otra función como en Laravel: self.readyBuy()
-        # Por ejemplo: ready_buy(new_price)
 
         return {
             "status": "success",
