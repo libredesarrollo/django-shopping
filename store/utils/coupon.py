@@ -21,7 +21,7 @@ class UtilityCoupon:
             }
 
         # 3. Verifica si ya fue usado
-        if coupon.user_id is not None or coupon.academy_couponable_id is not None:
+        if coupon.user_id is not None or coupon.couponable is not None:
             return {
                 "status": "error",
                 "message": "Coupon Used"
