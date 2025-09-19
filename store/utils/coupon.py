@@ -7,7 +7,7 @@ from ..models import Coupon
 
 class UtilityCoupon:
     
-    def check_coupon(self, coupon_code, priceProduct):
+    def check_coupon(self, coupon_code, price_product):
         # 1. Elimina cupones antiguos (más de 30 días)
         Coupon.objects.filter(created_at__lt=timezone.now() - timedelta(days=30)).delete()
 
@@ -28,7 +28,7 @@ class UtilityCoupon:
             }
 
         # 4. Aplica el cupón
-        self.finalPrice = priceProduct - coupon.price
+        self.final_price = price_product - coupon.price
 
         return {
             "status": "success",

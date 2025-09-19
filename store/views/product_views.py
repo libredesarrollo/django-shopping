@@ -97,7 +97,6 @@ class ProductShow(DetailView, UtilityCoupon):
         context = super().get_context_data(**kwargs)
         product = self.object  # Obtienes la instancia del producto
         
-        
         context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID     
         context['stripe_key'] = settings.STRIPE_KEY     
         context["template_path"] = f"store/product/partials/detail/{product.product_type.slug}.html"
@@ -105,8 +104,7 @@ class ProductShow(DetailView, UtilityCoupon):
         if self.coupon:
             self.messageCoupon = self.check_coupon(self.coupon, product.price_offert)
             context["coupon"] = self.coupon
-            print('***************'+self.coupon)
-            print('***************'+str(self.messageCoupon))
+
             context["messageCoupon"] = self.messageCoupon   
         
         product.price_offert = f"{product.price_offert:.2f}"   # Para evitar errores en 'es' al definir flotantes con ,
