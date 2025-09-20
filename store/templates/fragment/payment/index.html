@@ -6,6 +6,7 @@
     });
 </script>
 
+{% if not coupon %}
     <form class="flex gap-0 max-w-72 h-9 mx-auto">
             <input
                 id="coupon"
@@ -24,8 +25,9 @@
                 </svg>
             </button>
     </form>
-
+{% else %}
     <div class="flex gap-2 justify-center" x-data>
+        {% comment %} procesando {% endcomment %}
         
         <div x-show="$store.payment.loading" class="mt-4 text-blue-600 font-semibold">
             <svg class="inline w-5 h-5 animate-spin mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -39,6 +41,7 @@
             {{ _('Processing') }}...
         </div>
         
+        {% comment %} buttons payments {% endcomment %}
         <div x-show="!$store.payment.loading" class="flex flex-col gap-2 justify-center items-center mt-5">
             {% include "fragment/payment/_paypal.html" with paypal_client_id=paypal_client_id price=price id=id url=payment_url_paypal %}
             <p>{{_('Or')}}</p>
@@ -49,3 +52,4 @@
                     {{ price }}$</span></p>
         </div>
     </div>
+{% endif %}

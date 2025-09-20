@@ -103,14 +103,20 @@ class ProductShow(DetailView, UtilityCoupon):
 
         if self.coupon:
             self.messageCoupon = self.check_coupon(self.coupon, product.price_offert)
-            context["coupon"] = self.coupon
-
+            
+            if self.messageCoupon.get('status') == 'success':
+                product.price_offert = f"{self.final_price:.2f}"   # Para evitar errores en 'es' al definir flotantes con ,
+                context["coupon"] = self.coupon
+            else:
+                product.price_offert = f"{product.price_offert:.2f}"   # Para evitar errores en 'es' al definir flotantes con ,
+        
             context["messageCoupon"] = self.messageCoupon   
         
-        product.price_offert = f"{product.price_offert:.2f}"   # Para evitar errores en 'es' al definir flotantes con ,
-
-        
-
+   
+# 1 cupon esta establecido correcto!
+# 2 cupon no establecido
+#    2.5 messageCoupon esta estableicdo, CUPON incorrecto
+#    2.6 messageCoupon NP esta estableicdo, no hay CUPON 
         return context    
     
     def get_queryset(self):
