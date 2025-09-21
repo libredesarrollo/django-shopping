@@ -1,55 +1,84 @@
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.store('payment', {
-            loading: false
+            loading: false,
+            step_one: {{ step_one|yesno:"false,true" }}
         });
     });
 </script>
 
-{% if not coupon %}
-    <form class="flex gap-0 max-w-72 h-9 mx-auto">
-            <input
-                id="coupon"
-                name="coupon"
-                type="text"
-                placeholder="{{ _('Coupon') }}"
-                class="flex-1 h-full px-3 border border-gray-300 rounded-l-md"
-            />
 
-            <button
-                type="submit"
-                class="h-full px-3 btn-success rounded-r-md"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
-                </svg>
-            </button>
-    </form>
-{% else %}
-    <div class="flex gap-2 justify-center" x-data>
-        {% comment %} procesando {% endcomment %}
-        
-        <div x-show="$store.payment.loading" class="mt-4 text-blue-600 font-semibold">
-            <svg class="inline w-5 h-5 animate-spin mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
-                viewBox="0 0 24 24">
-                <circle class="opacity-25 text-purple-600" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                </circle>
-                <path class="opacity-75 text-purple-600" fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z">
-                </path>
-            </svg>
-            {{ _('Processing') }}...
-        </div>
-        
-        {% comment %} buttons payments {% endcomment %}
-        <div x-show="!$store.payment.loading" class="flex flex-col gap-2 justify-center items-center mt-5">
-            {% include "fragment/payment/_paypal.html" with paypal_client_id=paypal_client_id price=price id=id url=payment_url_paypal %}
-            <p>{{_('Or')}}</p>
-            <div>
-                {% include "fragment/payment/_stripe.html" with stripe_key=stripe_key entity='book' id=id %}
+{% if messageCoupon %}
+    <div class="flex flex-col items-center">
+        {% if messageCoupon.status == 'success' %}
+            <div class="bg-green-100 border-l-4 border-green-500 p-1 rounded-md mb-4 w-full max-w-sm" role="alert">
+                <p class="m-0 text-green-700!"><span class="font-bold">{{ _('Success') }}</span>: {{ messageCoupon.message }} - <span class="text-sm">{{ coupon }}</span></p>
             </div>
-            <p class="text-sm !text-gray-500 dark:!text-gray-300">{{ _('You will be charged') }} <span class="font-bold">
-                    {{ price }}$</span></p>
-        </div>
+        {% endif %}
+        {% if messageCoupon.status == 'error' %}
+            <div class="bg-red-100 border-l-4 border-red-500 p-1 rounded-md mb-4 w-full max-w-sm" role="alert">
+                <p class="m-0 text-red-700!"><span class="font-bold">{{ _('Error') }}</span>: {{ messageCoupon.message }}</p>
+            </div>
+        {% endif %}
     </div>
 {% endif %}
+
+{% if not step_one %}
+<!-- indica el paso en el cual se encuentra, paso 1, solo input cupon y boton de pagar ya -->
+   <div class="flex flex-col items-center" x-data x-show="$store.payment.step_one" >
+
+        <form class="flex gap-0 max-w-72 h-9 mx-auto">
+                <input
+                    id="coupon"
+                    name="coupon"
+                    value="{{coupon}}"
+                    type="text"
+                    placeholder="{{ _('Coupon') }}"
+                    class="flex-1 h-full px-3 border border-gray-300 rounded-l-md"
+                />
+
+                <input type="hidden" name="step_one" value="2">
+
+                <button
+                    type="submit"
+                    class="h-full px-3 btn-success rounded-r-md"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                    </svg>
+                </button>
+        </form>
+        <p>{{ _('Or') }}</p>
+        <button @click="$store.payment.step_one=false" class="btn btn-lg btn-success">
+            {{ _('Payment Now') }}
+        </button>
+   </div>
+{% else %}
+{% endif %}
+<div class="flex gap-2 justify-center" x-show="!$store.payment.step_one" x-data>
+    <!-- paso dos, pasarelas de pago -->
+    {% comment %} procesando {% endcomment %}
+    
+    <div x-show="$store.payment.loading" class="mt-4 text-blue-600 font-semibold">
+        <svg class="inline w-5 h-5 animate-spin mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24">
+            <circle class="opacity-25 text-purple-600" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+            </circle>
+            <path class="opacity-75 text-purple-600" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z">
+            </path>
+        </svg>
+        {{ _('Processing') }}...
+    </div>
+    
+    {% comment %} buttons payments {% endcomment %}
+    <div x-show="!$store.payment.loading" class="flex flex-col gap-2 justify-center items-center mt-5">
+        {% include "fragment/payment/_paypal.html" with paypal_client_id=paypal_client_id price=price id=id url=payment_url_paypal %}
+        <p>{{_('Or')}}</p>
+        <div>
+            {% include "fragment/payment/_stripe.html" with stripe_key=stripe_key entity='book' id=id %}
+        </div>
+        <p class="text-sm !text-gray-500 dark:!text-gray-300">{{ _('You will be charged') }} <span class="font-bold">
+                {{ price }}$</span></p>
+    </div>
+</div>

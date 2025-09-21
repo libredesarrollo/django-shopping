@@ -88,9 +88,9 @@ class ProductShow(DetailView, UtilityCoupon):
     slug_url_kwarg = 'slug'   
     
     def get(self, request, *args, **kwargs):
-        coupon = request.GET.get('coupon')
-        self.coupon = coupon
-
+        self.coupon = request.GET.get('coupon')
+        self.step_one = request.GET.get('step_one')
+ 
         return super().get(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
@@ -100,14 +100,16 @@ class ProductShow(DetailView, UtilityCoupon):
         context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID     
         context['stripe_key'] = settings.STRIPE_KEY     
         context["template_path"] = f"store/product/partials/detail/{product.product_type.slug}.html"
+        context["step_one"] = self.step_one 
 
         if self.coupon:
             self.messageCoupon = self.check_coupon(self.coupon, product.price_offert)
+            context["coupon"] = self.coupon
             
             if self.messageCoupon.get('status') == 'success':
                 product.price_offert = f"{self.final_price:.2f}"   # Para evitar errores en 'es' al definir flotantes con ,
-                context["coupon"] = self.coupon
             else:
+                context["step_one"] = None
                 product.price_offert = f"{product.price_offert:.2f}"   # Para evitar errores en 'es' al definir flotantes con ,
         
             context["messageCoupon"] = self.messageCoupon   
