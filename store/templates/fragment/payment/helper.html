@@ -2,8 +2,9 @@
     {% comment %} payment {% endcomment %}
     {% url base_payment_url_name 'orderID' product.id 'paypal' as payment_url_paypal %}
     {% url base_payment_url_name 'orderID' product.id 'stripe' as payment_url_stripe %}
+
+    {% include "fragment/payment/index.html" with paypal_client_id=paypal_client_id stripe_key=stripe_key product=product coupon=coupon payment_url_paypal=payment_url_paypal payment_url_stripe=payment_url_stripe entity=entity %}
     
-    {% include "fragment/payment/index.html" with paypal_client_id=paypal_client_id stripe_key=stripe_key price=product.price_offert entity='product' id=product.id payment_url_paypal=payment_url_paypal payment_url_stripe=payment_url_stripe coupon=coupon  %}
 
 {% comment %} payment {% endcomment %}
 {% else %}

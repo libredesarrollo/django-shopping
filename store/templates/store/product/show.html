@@ -25,7 +25,6 @@
                     {{ product.price_offert }}$
                 </p>
 
-                {% comment %} data {% endcomment %}
                 <a class="btn-sm btn-success" target="_blank"  href="{% url 'b.index' %}?category_id={{ product.post.category.id }}">
                     {{ product.post.category.title }}
                 </a>
@@ -35,9 +34,8 @@
                         {{ t.tag.title }}
                     </a>
                 {% endfor %}
-                {% comment %} data {% endcomment %}
-
-                {% include "fragment/payment/helper.html" with base_payment_url_name='s.product.payment' coupon=coupon  %}
+                    
+                {% include "fragment/payment/helper.html" with base_payment_url_name='s.product.payment' coupon=coupon product=product entity='product' %}
             </div>
         </div>
 

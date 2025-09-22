@@ -1,0 +1,21 @@
+{% if user.is_authenticated %}
+    {% comment %} payment {% endcomment %}
+    {% url base_payment_url_name 'orderID' product.id 'paypal' as payment_url_paypal %}
+    {% url base_payment_url_name 'orderID' product.id 'stripe' as payment_url_stripe %}
+
+    {% if coupon %}
+            <!-- si hay cupon, la agrega a la URL anterior -->
+        {% with payment_url_stripe|add:"?coupon="|add:coupon as payment_url_stripe %}
+            <!-- la nueva variable payment_url_stripe solo existe tendro del with -->
+            {% include "fragment/payment/index.html" with paypal_client_id=paypal_client_id stripe_key=stripe_key product=product coupon=coupon payment_url_paypal=payment_url_paypal payment_url_stripe=payment_url_stripe entity=entity %}  
+        {% endwith %}
+    {% else %}
+        {% include "fragment/payment/index.html" with paypal_client_id=paypal_client_id stripe_key=stripe_key product=product coupon=coupon payment_url_paypal=payment_url_paypal payment_url_stripe=payment_url_stripe entity=entity %}
+    {% endif %}
+
+    
+
+{% comment %} payment {% endcomment %}
+{% else %}
+    {% include "fragment/_need_login.html" %}
+{% endif %}

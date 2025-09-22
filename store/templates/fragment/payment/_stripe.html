@@ -1,9 +1,11 @@
 </script>
 <script src="https://js.stripe.com/v3/"></script>
 <button id="payStripe" class='btn btn-success'>Stripe</button> 
+
 <script>
 const stripe = Stripe("{{ stripe_key }}");
 // let click = false;
+
 document.getElementById("payStripe").addEventListener("click", function () {
     Alpine.store('payment').loading = true;
     document.getElementById("payStripe").disabled = true;
@@ -11,9 +13,16 @@ document.getElementById("payStripe").addEventListener("click", function () {
     //click = true;
     const formData = new FormData();
     const csrfToken = '{{ csrf_token }}';
+    
+    // el session ID es generico para los libros y productos
     formData.append('entity', '{{ entity }}');
-    formData.append('id', {{ id }});
-    formData.append('url', window.location.origin + '{{ payment_url_stripe }}');
+    formData.append('id', {{ product.id }});
+    // *** url usada para generar el sessionID de retorno
+    formData.append('url', window.location.origin + '{{ url }}');
+    
+    if ('{{ coupon }}') {
+        formData.append('coupon','{{ coupon }}');
+    }
 
     fetch("{% url 's.create_checkout_session' %}", {
         headers: {
@@ -31,7 +40,8 @@ document.getElementById("payStripe").addEventListener("click", function () {
             click=false
             return response.json();
         })*/
+        //  .then(session => console.log(session))
         .then(session => stripe.redirectToCheckout({ sessionId: session.id }))
-        .catch(error => console.error("Error:", error));
+        // .catch(error => console.error("Error:", error));
 });
 </script>

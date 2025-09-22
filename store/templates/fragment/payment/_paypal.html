@@ -18,15 +18,27 @@
                 purchase_units:[
                     {
                         amount: {
-                            value:{{ price }}
+                            value:{{ product.price_offert }}
                         }
                     }
                 ]
             })
         },
         onApprove: function(data, actions){
- 
+
+            let body = {};
+
             const csrfToken = '{{ csrf_token }}';
+
+            // const formData = new FormData();
+            // Agregar coupon solo si no está vacío
+            if ('{{ coupon }}') {
+                // formData.append('coupon','{{ coupon }}');
+                 body = {
+                    coupon: '{{ coupon }}'
+                };
+            }
+ 
             // fetch(`/store/payment/${data.orderID}/{{id}}/paypal`, {
             fetch(`{{payment_url_paypal}}`.replace('orderID', data.orderID), {
                 method: 'POST',
@@ -34,6 +46,8 @@
                         'Content-Type': 'application/json',
                         'X-CSRFToken': csrfToken
                     },
+                    body: JSON.stringify(body),
+                    // body: formData,
                 })
                 .then(response => response.json())
                 .then(response => {
