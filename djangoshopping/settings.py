@@ -198,6 +198,14 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Carpeta donde se guardarán los archivos estáticos recopilados
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+# Asegúrate de tener tu carpeta STATICFILES_DIRS si tienes otros archivos estáticos
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
 
 # LOGGING = {
 #     'version': 1,
