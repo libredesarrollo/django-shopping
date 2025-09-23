@@ -1,9 +1,13 @@
 
 from django.utils import timezone
+from django.contrib.auth.models import User
 from datetime import timedelta
-from django.http import JsonResponse
 
-from ..models import Coupon
+from django.contrib.contenttypes.models import ContentType
+
+from typing import TypeVar
+
+from ..models import Coupon, ProductAbstract
 
 class UtilityCoupon:
     
@@ -34,3 +38,12 @@ class UtilityCoupon:
             "status": "success",
             "message": "Coupon Applied",
         }
+    
+    T = TypeVar("T", bound=ProductAbstract)
+
+    def mark_coupon_as_used(self, coupon_code: str, user: User, obj: T):
+        coupon = Coupon.objects.get(coupon=coupon_code)
+        coupon.user = user
+        coupon.content_type=ContentType.objects.get_for_model(obj)
+        coupon.object_id=obj.id
+        coupon.save()

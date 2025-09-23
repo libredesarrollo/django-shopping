@@ -35,7 +35,7 @@ class UserPaymentsView(LoginRequiredMixin, ListView):
         )
     
 # Procesa el pago
-class BasePaymentView(LoginRequiredMixin, View, BasePayment):
+class BasePaymentView(LoginRequiredMixin, View, BasePayment, UtilityCoupon):
     model = None          # el modelo (Book o Product)
     lookup_field = "id"   # campo de búsqueda (generalmente id)
     url_kwarg = None      # el parámetro en la URL (book_id, product_id)
@@ -100,6 +100,11 @@ class BasePaymentView(LoginRequiredMixin, View, BasePayment):
             content_type=ContentType.objects.get_for_model(obj),
             object_id=obj.id
         )
+
+        # registramos el cupon como consumido
+        if coupon:
+            self.mark_coupon_as_used(coupon, user, obj)
+
 
         return self._redirect_or_json(request, "s.payment.success", payment_id=payment.id)
 

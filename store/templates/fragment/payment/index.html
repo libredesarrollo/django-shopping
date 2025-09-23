@@ -79,6 +79,6 @@
             {% include "fragment/payment/_stripe.html" with entity=entity stripe_key=stripe_key id=id url=payment_url_stripe%}
         </div>
         <p class="text-sm !text-gray-500 dark:!text-gray-300">{{ _('You will be charged') }} <span class="font-bold">
-                {{ price }}$</span></p>
+                {{ product.price_offert }}$</span></p>
     </div>
 </div>
