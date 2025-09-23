@@ -30,7 +30,6 @@ LOCALE_PATHS = [
 ]
 #Language
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -42,7 +41,7 @@ DEBUG = True
 
 PAYPAL_PRODUCTION = os.environ.get('PAYPAL_PRODUCTION', True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['acy29.pythonanywhere.com']
 
 
 # Application definition
