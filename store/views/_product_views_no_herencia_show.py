@@ -1,13 +1,14 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.conf import settings
 
 from django.db.models import Q
 from django.utils.dateparse import parse_date
+from django.utils.translation import gettext_lazy as _
 
 from blog.models import Category, Tag
-from ..models import Product, ProductType
+from ..models import Product, ProductType, Coupon
 
-from .generic import ProductShowAbstractView
+from ..utils.coupon import UtilityCoupon
 
 from abc import ABC
 
@@ -64,12 +65,73 @@ class ProductIndex(ProductIndexAbstract):
 
 #******** Listado de Products por tipo producto     
 class ProductIndexByType(ProductIndexAbstract):
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        slug = self.kwargs.get("slug")
+        return queryset.filter(product_type__slug=slug)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product_type = ProductType.objects.filter(slug=self.kwargs.get("slug")).get()
         context["template_path"] = f"store/product/partials/list/{product_type.slug}.html"
         return context
+    
+
+    
+# Detalle del producto    
+class ProductShow(DetailView, UtilityCoupon):
+    model=Product
+    context_object_name='product'
+    template_name='store/product/show.html'
+    slug_field = 'slug'            
+    slug_url_kwarg = 'slug'   
+    
+    def get(self, request, *args, **kwargs):
+        self.coupon = request.GET.get('coupon')
+        self.step_one = request.GET.get('step_one')
+ 
+        return super().get(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = self.object  # Obtienes la instancia del producto
+        
+        # claves de pago
+        context['paypal_client_id'] = settings.PAYPAL_CLIENT_ID     
+        context['stripe_key'] = settings.STRIPE_KEY     
+        # template de detalle personalizado
+        context["template_path"] = f"store/product/partials/detail/{product.product_type.slug}.html"
+
+        # indica si es el paso 1 (cupon y boton de pago) o 2 (paypal y stripe botones)
+        context["step_one"] = self.step_one 
+
+        # si hay cupon, lo procesa
+        if self.coupon:
+            # verifica si es valido
+            self.messageCoupon = self.check_coupon(self.coupon, product.price_offert)
+            context["coupon"] = self.coupon
+            
+            if self.messageCoupon.get('status') == 'success':
+                # product.price_offert = f"{self.final_price:.2f}"   # Para evitar errores en 'es' al definir flotantes con ,
+                # es valido, aplica el cupon
+                product.price_offert = self.final_price 
+            else:
+                # no es valido, sigue en el paso 1
+                context["step_one"] = None
+        
+            context["messageCoupon"] = self.messageCoupon   
+
+        # Para evitar errores en 'es' al definir flotantes con ,
+        product.price_offert = f"{product.price_offert:.2f}"
+            
+        
+   
+# 1 cupon esta establecido correcto!
+# 2 cupon no establecido
+#    2.5 messageCoupon esta estableicdo, CUPON incorrecto
+#    2.6 messageCoupon NP esta estableicdo, no hay CUPON 
+        return context    
     
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -80,21 +142,3 @@ class ProductIndexByType(ProductIndexAbstract):
             slug=product_slug,
             product_type__slug=type_slug
         )
-    
-
-    
-# Detalle del producto    
-class ProductShow(ProductShowAbstractView):
-    model=Product
-    context_object_name='product'
-    template_name='store/product/show.html'
-    slug_field = 'slug'            
-    slug_url_kwarg = 'slug'   
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        product = self.object  # Obtienes la instancia del producto
-        context["template_path"] = f"store/product/partials/detail/{product.product_type.slug}.html"
-            
-        return context    

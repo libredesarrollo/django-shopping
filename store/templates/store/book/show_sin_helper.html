@@ -35,7 +35,17 @@
                 {% endfor %}
                 {% comment %} data {% endcomment %}
 
-                {% include "fragment/payment/helper.html" with base_payment_url_name='s.payment' coupon=coupon product=book entity='book' %}
+                {% if user.is_authenticated %}
+                    {% comment %} payment {% endcomment %}
+                    {% url 's.payment' 'orderID' book.id 'paypal' as payment_url_paypal %}
+                    {% url 's.payment' 'orderID' book.id 'stripe' as payment_url_stripe %}
+                    
+                    {% include "fragment/payment/index.html" with paypal_client_id=paypal_client_id stripe_key=stripe_key price=book.price_offert entity='book' id=book.id payment_url_paypal=payment_url_paypal payment_url_stripe=payment_url_stripe  %}
+               
+                {% comment %} payment {% endcomment %}
+                {% else %}
+                    {% include "fragment/_need_login.html" %}
+                {% endif %}
             </div>
         </div>
 

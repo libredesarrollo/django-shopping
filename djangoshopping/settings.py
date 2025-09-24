@@ -41,7 +41,7 @@ DEBUG = True
 
 PAYPAL_PRODUCTION = os.environ.get('PAYPAL_PRODUCTION', True)
 
-ALLOWED_HOSTS = ['acy29.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1','acy29.pythonanywhere.com']
 
 
 # Application definition
