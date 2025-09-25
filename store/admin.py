@@ -2,7 +2,8 @@ from django.contrib import admin
 from django import forms
 
 from django.contrib.contenttypes.admin import GenericTabularInline
-from django.contrib.contenttypes.models import ContentType
+
+from django.utils.html import format_html
 
 from .models import Book, Product, ProductType, Payment, Coupon
 from blog.models import Taggable
@@ -53,9 +54,9 @@ class ProductTypeAdmin(admin.ModelAdmin):
 #**** producto
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('id','created_at', 'user', 'short_orderId','type', 'price')
+    list_display = ('id','created_at', 'user', 'short_orderId','type', 'price', 'coupon')
     list_filter = ('user', 'type')
-    search_fields = ('id', 'user__username', 'type', 'trace', 'orderId') 
+    search_fields = ('id', 'user__username', 'type', 'trace', 'orderId', 'coupon') 
     
     def short_orderId(self, obj):
         if obj.orderId:  # suponiendo que tu campo se llama trace
@@ -67,5 +68,29 @@ class PaymentAdmin(admin.ModelAdmin):
 # Coupon
 @admin.register(Coupon)
 class CouponAdmin(admin.ModelAdmin):
-    list_display = ('id', 'price', 'coupon', 'created_at', 'coupon')
+    list_display = ('id', 'price', 'coupon', 'created_at', 'coupon', 'user_info')
     fields = ('price','coupon')
+    
+    
+    def user_info(self, obj):
+        if obj.user:  # si existe user_id
+            return format_html(
+                '<a href="/admin/store/payment/?q={coupon}" target="_blank">'
+                '<img src="/static/admin/img/icon-yes.svg" alt="True">'
+                '<p class="text-xs">{created_at}</p>'
+                '</a>'
+                '<a href="/admin/auth/user/?q={email}" target="_blank">'
+                '<p class="text-xs">/{email}</p>'
+                '</a>'
+                ,
+                coupon=obj.coupon,
+                created_at=obj.created_at.strftime("%Y-%m-%d %H:%M"),
+                email=obj.user.email
+            )
+        else:
+            return format_html(
+                '<img src="/static/admin/img/icon-no.svg" alt="True">'
+            )
+
+    user_info.short_description = "Info"
+    user_info.allow_tags = True
