@@ -71,6 +71,12 @@
   font-display: swap;
 }
 
+dark\:bg-gray-800 {
+   @media (prefers-color-scheme: dark) {
+       background-color: var(--color-gray-800);
+   }
+}
+
 body {
   @apply dark:bg-gray-700
 }

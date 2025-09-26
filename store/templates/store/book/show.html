@@ -35,13 +35,21 @@
                 {% endfor %}
                 {% comment %} data {% endcomment %}
 
+                {% if payment %}
+                    <div class="card card-primary my-3">
+                        <div class="card-body">
+                            <p class="m-0! text-sm">{{ _('Product already buy in:') }} {{ payment.created_at }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
                 {% include "fragment/payment/helper.html" with base_payment_url_name='s.payment' coupon=coupon product=book entity='book' %}
             </div>
         </div>
 
         <hr class="my-3 dark:text-white">
-        <section class="mycard mx-auto">
-            <div class="mycard-body">
+        <section class="card mx-auto">
+            <div class="card-body">
                 {{ book.content|safe }}
             </div>
         </section>

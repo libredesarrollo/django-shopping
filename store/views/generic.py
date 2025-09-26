@@ -1,11 +1,12 @@
 from django.views.generic import DetailView
 from django.conf import settings
 
-from django.utils.translation import gettext_lazy as _
+from django.contrib.contenttypes.models import ContentType
 
-from ..models import Product
+from ..models import Payment
 
 from ..utils.coupon import UtilityCoupon
+
 
 # clase a usar para todos los detalles de entidades comprables
 class ProductShowAbstractView(DetailView, UtilityCoupon):
@@ -42,8 +43,15 @@ class ProductShowAbstractView(DetailView, UtilityCoupon):
                 # no es valido, sigue en el paso 1
                 context["step_one"] = None
         
-            context["messageCoupon"] = self.messageCoupon   
-
+            context["messageCoupon"] = self.messageCoupon
+        
+        if self.request.user.is_authenticated:
+            context["payment"] = Payment.objects.filter(
+                    user=self.request.user,
+                    object_id=self.object.id,
+                    content_type=ContentType.objects.get_for_model(self.object) 
+                ).order_by("-created_at").first()
+            
         # Para evitar errores en 'es' al definir flotantes con ,
         product.price_offert = f"{product.price_offert:.2f}"
             

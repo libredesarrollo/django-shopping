@@ -71,16 +71,15 @@ class CouponAdmin(admin.ModelAdmin):
     list_display = ('id', 'price', 'coupon', 'created_at', 'coupon', 'user_info')
     fields = ('price','coupon')
     
-    
     def user_info(self, obj):
         if obj.user:  # si existe user_id
             return format_html(
                 '<a href="/admin/store/payment/?q={coupon}" target="_blank">'
                 '<img src="/static/admin/img/icon-yes.svg" alt="True">'
-                '<p class="text-xs">{created_at}</p>'
+                '<p>{created_at}</p>'
                 '</a>'
                 '<a href="/admin/auth/user/?q={email}" target="_blank">'
-                '<p class="text-xs">/{email}</p>'
+                '<p>/{email}</p>'
                 '</a>'
                 ,
                 coupon=obj.coupon,
