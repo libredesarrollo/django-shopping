@@ -16,12 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from user.views import ToggleThemeView
+
 from django.conf import settings
 
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('toggle-theme/', ToggleThemeView.as_view(), name='toggle_theme'),
     path("blog/", include('blog.urls')),
     path("store/", include('store.urls')),
     path("accounts/", include('user.urls')),

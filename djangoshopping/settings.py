@@ -129,7 +129,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 # django auth all
-                'django.template.context_processors.request',
+                # custom context processors
+                'user.context_processors.theme',
             ],
         },
     },

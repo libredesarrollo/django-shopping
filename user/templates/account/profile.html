@@ -30,6 +30,21 @@
                    <!-- <button type="submit">Send</button> -->
             </form>
         </div>
+
+        <form action="{% url 'toggle_theme' %}" method="post" class="flex items-center space-x-4">
+            {% csrf_token %}
+            <select name="theme" id="theme-select" class="form-select" onchange="this.form.submit()">
+                <option value="light" {% if theme == 'light' %}selected{% endif %}>
+                    {% trans "Choose your theme" %}: {% trans "Light" %}
+                </option>
+
+                <option value="dark" {% if theme == 'dark' %}selected{% endif %}>
+                    {% trans "Choose your theme" %}: {% trans "Dark" %}
+                </option>
+            </select>
+            <!-- <button type="submit">Send</button> -->
+        </form>
+
         <div class="flex justify-between items-center mt-3">
             <form method="post" action="{% url 'account_logout' %}">
                 {% csrf_token %}

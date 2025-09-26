@@ -2,6 +2,8 @@
 
 @plugin "@tailwindcss/typography";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /**
   * A catch-all path to Django template files, JavaScript, and Python files
   * that contain Tailwind CSS classes and will be scanned by Tailwind to generate the final CSS file.
@@ -71,14 +73,8 @@
   font-display: swap;
 }
 
-dark\:bg-gray-800 {
-   @media (prefers-color-scheme: dark) {
-       background-color: var(--color-gray-800);
-   }
-}
-
 body {
-  @apply dark:bg-gray-700
+  @apply bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 transition-colors duration-300;
 }
 
 p,
@@ -209,14 +205,3 @@ div.post img {
   height: 100%;
 }
 /* youtube */
-
-.prose-lg h1,
-.prose-lg h2,
-.prose-lg h3,
-.prose-lg h4,
-.prose-lg h5,
-.prose-lg h6,
-.prose-lg p, 
-.prose-lg li {
-	@apply dark:text-white
-}
