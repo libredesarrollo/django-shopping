@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from user.views import ToggleThemeView
+from django.views.generic.base import RedirectView
 
 from django.conf import settings
 
@@ -32,4 +33,6 @@ urlpatterns = [
     # django auth all
     path('accounts/', include('allauth.urls')),
     path('i18n/', include('django.conf.urls.i18n')), 
+    path('', RedirectView.as_view(url='/store/product', permanent=True)),
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

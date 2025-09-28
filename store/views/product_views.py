@@ -74,11 +74,10 @@ class ProductIndexByType(ProductIndexAbstract):
     def get_queryset(self):
         queryset = super().get_queryset()
         product_slug = self.kwargs.get("slug")
-        type_slug = self.kwargs.get("type")
         
         return queryset.filter(
-            slug=product_slug,
-            product_type__slug=type_slug
+            # slug=product_slug,
+            product_type__slug=product_slug
         )
     
 
