@@ -15,7 +15,7 @@
 
         <div class="sm:grid grid-cols-[1fr_2fr] gap-7">
             {% if product.image %}
-                <img class="post" alt="{{ product.title }}" title="{{ product.title }}" src="{{ product.getImageUrl }}" />
+                <img class="post" style="view-transition-name: {{ product.slug }}" alt="{{ product.title }}" title="{{ product.title }}" src="{{ product.getImageUrl }}" />
             {% endif %}
             <div>
             

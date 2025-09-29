@@ -54,7 +54,7 @@
             {% for p in products %}
                 <div class="flex flex-col border rounded-lg shadow p-4 dark:border-white">
                     {% if p.image %}
-                        <img class="post" alt="{{ p.title }}" title="{{ p.title }}" src="{{ p.getImageUrl }}" />
+                        <img class="post" alt="{{ p.title }}" title="{{ p.title }}" src="{{ p.getImageUrl }}" style="view-transition-name: {{ p.slug }}" />
                     {% endif %}
                     <div class="mt-4">
                         <h3 class="uppercase text-center mt-2 text-lg font-semibold min-h-[3.5rem] mb-0 dark:text-white">{{ p.title }}</h3>

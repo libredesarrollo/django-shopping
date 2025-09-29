@@ -33,6 +33,6 @@ urlpatterns = [
     # django auth all
     path('accounts/', include('allauth.urls')),
     path('i18n/', include('django.conf.urls.i18n')), 
-    path('', RedirectView.as_view(url='/store/product', permanent=True)),
+    path('', RedirectView.as_view(url='/store/product')),#, permanent=True
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

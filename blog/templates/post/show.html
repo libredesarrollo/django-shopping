@@ -7,7 +7,7 @@
                 <h1 class="text-center">{{ post.title }}</h1>
 
                 {% if post.image %}
-                    <img class="post" alt="{{ post.title }}" title="{{ post.title }}" src="{{ post.getImageUrl }}" />
+                    <img style="view-transition-name: {{ post.slug }}" class="post" alt="{{ post.title }}" title="{{ post.title }}" src="{{ post.getImageUrl }}" />
                 {% endif %}
 
                 <p class="my-0 ml-2">

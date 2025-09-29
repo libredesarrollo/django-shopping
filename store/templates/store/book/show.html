@@ -10,7 +10,7 @@
 
         <div class="sm:grid grid-cols-[1fr_2fr] gap-7">
             {% if book.image %}
-                <img class="post" alt="{{ book.title }}" title="{{ book.title }}" src="{{ book.getImageUrl }}" />
+                <img style="view-transition-name: {{ book.slug }}" class="post" alt="{{ book.title }}" title="{{ book.title }}" src="{{ book.getImageUrl }}" />
             {% endif %}
             <div>
             
