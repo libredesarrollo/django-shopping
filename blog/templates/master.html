@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Store{% endblock %}</title>
     {% tailwind_css %}
+    {% load  modo_demo %}
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -15,6 +16,8 @@
 
 
 <body>
+   
+    
     <div class="bg-white dark:bg-gray-800 shadow-md pt-1" x-data="{ open: false }">
         {# pc menu #}
         <div class="container mb-3 mx-auto">
@@ -96,6 +99,17 @@
 
     </div>
     <div class='container mx-auto'>
+        {% is_demo as demo %}
+        {% if demo %}
+            <div class="alert alert-info" role="alert">
+                <!-- <strong>Atención:</strong> Estás en modo DEMO. -->
+                <ul class="m-0">
+                    <li>user: admin</li>
+                    <li>password: bPmTxjfYjF33Ur@</li>
+                    <li><a href="/admin">Admin</a></li>
+                </ul>
+            </div>
+        {% endif %} 
         {% block content %}
         {% endblock %}
     </div>
