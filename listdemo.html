@@ -1,0 +1,247 @@
+<html><head>
+<meta charset="utf-8"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+      :root {
+        --primary-50: #eff6ff;
+        --primary-100: #dbeafe;
+        --primary-200: #bfdbfe;
+        --primary-300: #93c5fd;
+        --primary-400: #60a5fa;
+        --primary-500: #3b82f6;
+        --primary-600: #2563eb;
+        --primary-700: #1d4ed8;
+        --primary-800: #1e40af;
+        --primary-900: #1e3a8a;
+        --primary-950: #172554;
+      }
+    </style>
+</head>
+<body class="bg-gray-50 font-['Work_Sans'] text-gray-800">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<header class="sticky top-0 z-10 w-full bg-white/80 shadow-sm backdrop-blur-md">
+<div class="container mx-auto flex items-center justify-between px-4 py-4 lg:px-8">
+<div class="flex items-center gap-8">
+<a class="flex items-center gap-2 text-xl font-bold text-gray-900" href="#">
+<svg class="h-7 w-7 text-primary-600" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M44 11.2727C44 14.0109 39.8386 16.3957 33.69 17.6364C39.8386 18.877 44 21.2618 44 24C44 26.7382 39.8386 29.123 33.69 30.3636C39.8386 31.6043 44 33.9891 44 36.7273C44 40.7439 35.0457 44 24 44C12.9543 44 4 40.7439 4 36.7273C4 33.9891 8.16144 31.6043 14.31 30.3636C8.16144 29.123 4 26.7382 4 24C4 21.2618 8.16144 18.877 14.31 17.6364C8.16144 16.3957 4 14.0109 4 11.2727C4 7.25611 12.9543 4 24 4C35.0457 4 44 7.25611 44 11.2727Z" fill="currentColor"></path>
+</svg>
+<span>ShopAll</span>
+</a>
+<nav class="hidden items-center gap-6 lg:flex">
+<a class="text-sm font-medium text-gray-600 hover:text-primary-600" href="#">New</a>
+<a class="text-sm font-medium text-gray-600 hover:text-primary-600" href="#">Women</a>
+<a class="text-sm font-medium text-gray-600 hover:text-primary-600" href="#">Men</a>
+<a class="text-sm font-medium text-gray-600 hover:text-primary-600" href="#">Kids</a>
+<a class="text-sm font-medium text-gray-600 hover:text-primary-600" href="#">Accessories</a>
+<a class="text-sm font-medium text-red-500 hover:text-red-600" href="#">Sale</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 md:hidden">
+<span class="material-symbols-outlined"> search </span>
+</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+<span class="material-symbols-outlined"> favorite_border </span>
+</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+<span class="material-symbols-outlined"> shopping_bag </span>
+</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 lg:hidden">
+<span class="material-symbols-outlined"> menu </span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1">
+<div class="container mx-auto px-4 py-8 lg:px-8">
+<div class="lg:grid lg:grid-cols-4 lg:gap-8">
+<aside class="mb-8 lg:mb-0">
+<div class="sticky top-24">
+<h2 class="text-lg font-semibold text-gray-900">Filters</h2>
+<div class="mt-4 space-y-6">
+<div>
+<label class="mb-2 block text-sm font-medium text-gray-700" for="search">Search</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+<input class="form-input w-full rounded-md border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm focus:border-primary-500 focus:ring-primary-500" id="search" placeholder="Search products..." type="search"/>
+</div>
+</div>
+<div>
+<label class="mb-2 block text-sm font-medium text-gray-700" for="category">Category</label>
+<select class="form-select w-full rounded-md border-gray-200 bg-white text-sm focus:border-primary-500 focus:ring-primary-500" id="category">
+<option>All</option>
+<option>T-Shirts</option>
+<option>Jeans</option>
+<option>Jackets</option>
+<option>Shoes</option>
+</select>
+</div>
+<div>
+<label class="mb-2 block text-sm font-medium text-gray-700">Tags</label>
+<div class="flex flex-wrap gap-2">
+<button class="rounded-full border border-gray-200 px-3 py-1 text-sm text-gray-600 hover:border-primary-500 hover:bg-primary-50 hover:text-primary-600">Casual</button>
+<button class="rounded-full border border-gray-200 px-3 py-1 text-sm text-gray-600 hover:border-primary-500 hover:bg-primary-50 hover:text-primary-600">Summer</button>
+<button class="rounded-full border border-primary-500 bg-primary-50 px-3 py-1 text-sm font-medium text-primary-600">Minimalist</button>
+<button class="rounded-full border border-gray-200 px-3 py-1 text-sm text-gray-600 hover:border-primary-500 hover:bg-primary-50 hover:text-primary-600">New Arrival</button>
+</div>
+</div>
+<div>
+<label class="mb-2 block text-sm font-medium text-gray-700" for="language">Language</label>
+<select class="form-select w-full rounded-md border-gray-200 bg-white text-sm focus:border-primary-500 focus:ring-primary-500" id="language">
+<option>English</option>
+<option>Spanish</option>
+<option>French</option>
+<option>German</option>
+</select>
+</div>
+<div>
+<label class="mb-2 block text-sm font-medium text-gray-700">Date Range</label>
+<div class="grid grid-cols-2 gap-2">
+<input class="form-input w-full rounded-md border-gray-200 bg-white text-sm focus:border-primary-500 focus:ring-primary-500" type="date"/>
+<input class="form-input w-full rounded-md border-gray-200 bg-white text-sm focus:border-primary-500 focus:ring-primary-500" type="date"/>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="w-full rounded-md bg-primary-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-primary-700">Apply</button>
+<button class="w-full rounded-md border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Reset</button>
+</div>
+</div>
+</div>
+</aside>
+<div class="lg:col-span-3">
+<div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+<h1 class="text-4xl font-bold text-gray-900">All Products</h1>
+<div class="flex items-center gap-2">
+<span class="text-sm text-gray-500">Sort by:</span>
+<select class="form-select rounded-md border-gray-200 bg-white text-sm focus:border-primary-500 focus:ring-primary-500">
+<option>Most Popular</option>
+<option>Newest</option>
+<option>Price: Low to High</option>
+<option>Price: High to Low</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3">
+<div class="group relative flex cursor-pointer flex-col">
+<div class="relative mb-3 overflow-hidden rounded-md">
+<div class="aspect-[3/4] w-full bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA-71WUH6n01cevFl6qX6WO0tdEzRaKKVHmNhae_umoZxgwjeJbnmFz5kTaIOLR92iYNxitWRoU20x46lM_euECm6uSGIgHeXae7VIfP8Qxiwv5MQnx6h22tY9ETpCSmVtqSoFeZmENyDkPjUMG15zIkN8nTJ6w8Mr_hjzyzTotebQIF31ksKmpLlFIO0wDXaHDroylW0xkcFFiFxOF_2lyUdjcXv5ydo8Q3mDefIaKGyzNwjLwzVch6erhbX-JRp5hhNdTquLhQKA");'></div>
+<button class="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-500 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-white hover:text-red-500">
+<span class="material-symbols-outlined text-xl"> favorite_border </span>
+</button>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-gray-800 group-hover:text-primary-600">Classic White Tee</h3>
+<p class="text-sm font-medium text-gray-600">$25</p>
+</div>
+</div>
+<div class="group relative flex cursor-pointer flex-col">
+<div class="relative mb-3 overflow-hidden rounded-md">
+<div class="aspect-[3/4] w-full bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAwfLEvbiIHKhrhYQDMoriGkdNc61dzpiKi57S7ovNxdmXeMjiISSRgTkxccwZZ03zWAFwBTrEoqJRPj5OxljDsXjoYTTfIxadiO3J2yGd6j41fK-GZWWnhxtz8UEGSvC_JnmahyrJWx-DSTzaRkxJG7K6xaEFU-Mbyk3dxDpGPY0AgadbPR0SSNEbacU-1KSPet5c5dEpP0hJs_XKNJiRDnqkLFXkXg2PmTUxJTtPabOve919qX9E0arzF-wTpVADqAu9VfY0AJZw");'></div>
+<button class="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-500 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-white hover:text-red-500">
+<span class="material-symbols-outlined text-xl"> favorite_border </span>
+</button>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-gray-800 group-hover:text-primary-600">Slim Fit Jeans</h3>
+<p class="text-sm font-medium text-gray-600">$60</p>
+</div>
+</div>
+<div class="group relative flex cursor-pointer flex-col">
+<div class="relative mb-3 overflow-hidden rounded-md">
+<div class="aspect-[3/4] w-full bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCJF9vYT9peGxkh2mIohIbDUAuLciaZDrvD5elVa_hD2vZGBqOWEHe7x4UCmYmpj-ag43MsJLGDx1vZdVAVN86ByTzkTkaoFMA3QFfJD5moaLyhluriaSRfzeZA_BWCJN8LmkwrBKRAu73glMjLst1A63ZtafENBewYywlmBPb8CQjftZPRuGo4qX0_njBfaL1e9LgyB9FpqpN7dRxSDGHJCotaSED2qQvd4VPK57Y9c1Jm3D6Dej3AatNrWLmcn91iLorBd6ooLdk");'></div>
+<button class="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-500 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-white hover:text-red-500">
+<span class="material-symbols-outlined text-xl"> favorite_border </span>
+</button>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-gray-800 group-hover:text-primary-600">Leather Jacket</h3>
+<p class="text-sm font-medium text-gray-600">$150</p>
+</div>
+</div>
+<div class="group relative flex cursor-pointer flex-col">
+<div class="relative mb-3 overflow-hidden rounded-md">
+<div class="aspect-[3/4] w-full bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA0vhU2HBbOXaoZqZd0sbwwf8fMNBFHtnRBhW_lq46u2bMRSBF_cKCDN1CP-75UZqkCQL3dn_BGDF4uGav037OXcumLc2scXo_-xX9U0tHlvQQVvAY5QceKVQBQ3sjfo2UkVUlJt3EzDiX_6TCzSmfm1muoXHrlBtgj_RLVB-vJNFgJNlrJ3FLQQVD-xxf7ukosf62r-AbsIdr-0GDaO8Qt3N69kqwVeU0C29BR3MDvq0vBtQlU4fCUb6i57QpNch4tCD9JFirOBik");'></div>
+<button class="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-500 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-white hover:text-red-500">
+<span class="material-symbols-outlined text-xl"> favorite_border </span>
+</button>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-gray-800 group-hover:text-primary-600">Running Shoes</h3>
+<p class="text-sm font-medium text-gray-600">$80</p>
+</div>
+</div>
+<div class="group relative flex cursor-pointer flex-col">
+<div class="relative mb-3 overflow-hidden rounded-md">
+<div class="aspect-[3/4] w-full bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLSFK3hc3bXh8CpKcS8PtaF7bdwkHddadjTpoDgCKkMvrHiUxgAVso-QdhzNrPN7NqO2HL4oimc616ENBsMQbuyOFyPR5Ulqs5MXMXD6GYMb5yUrxWzTdkMCRhdG5S2SdvLJbdbn38hin3CQxq66hW0_gv2PBK5hT2h8JVMP0pCrA8Vqrd5HG-2RKyaKwt64Fc7N3d46XyQTYZSXhZzC-hn7a4wGqnL9duHa_kLyQQWa2p93AE7Y3zcMcTkGw7S69xQri43CA1PPo");'></div>
+<button class="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-500 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-white hover:text-red-500">
+<span class="material-symbols-outlined text-xl"> favorite_border </span>
+</button>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-gray-800 group-hover:text-primary-600">Summer Dress</h3>
+<p class="text-sm font-medium text-gray-600">$45</p>
+</div>
+</div>
+<div class="group relative flex cursor-pointer flex-col">
+<div class="relative mb-3 overflow-hidden rounded-md">
+<div class="aspect-[3/4] w-full bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLgKm8uZ4h47xk-aXYxR5GFjAEpeaLgQQDCgBhkuFi3dFN-Az302n3N-1qdLsuYjDSA51Pb3Ivyk1k-Bnk7L5BunU85MSF8f1flhrXCyM-wcR49M0-NsamCa4F4me3fUd6dOqhpnY6Y23GO9q9jRsYs6vsx0-s8jFi-GfXFIc1Vl6e-YEQh_N4r_G_9U5MovJd1YXP6YaSMM_7tFRKKhlyYoOBnlUpZUsQymELPzRsyO3AmMCwJqu9MulYSENUQSaEObqwbCmDTtY");'></div>
+<button class="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-500 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-white hover:text-red-500">
+<span class="material-symbols-outlined text-xl"> favorite_border </span>
+</button>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-gray-800 group-hover:text-primary-600">Casual Sneakers</h3>
+<p class="text-sm font-medium text-gray-600">$70</p>
+</div>
+</div>
+<div class="group relative flex cursor-pointer flex-col">
+<div class="relative mb-3 overflow-hidden rounded-md">
+<div class="aspect-[3/4] w-full bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuALG2vq3nf2pH5LifTvy5w8mdHcIcmH9s7kosFLnvE5DvMfM_MhCuSKZqgkb-KKI_Fb4tXwsCefXsz-hWLvVqm0skUCf49fe8Sco3DrYsA-tN-VUHo8L4OuBOot70azJX7mm-R1f3yVwZOQHGh6y3jOVS4csFfvgU2rqrr3kcQHYL5Af1D0znblvmgYMIdQTAf2HTLqTEazi4uhtR_7B0nWrUeNmHV34cXH0CBbWs66nL5lRHYTlEWXUP5ATgh_ghT4TRqIgATSK3A");'></div>
+<button class="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-500 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-white hover:text-red-500">
+<span class="material-symbols-outlined text-xl"> favorite_border </span>
+</button>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-gray-800 group-hover:text-primary-600">Winter Coat</h3>
+<p class="text-sm font-medium text-gray-600">$200</p>
+</div>
+</div>
+<div class="group relative flex cursor-pointer flex-col">
+<div class="relative mb-3 overflow-hidden rounded-md">
+<div class="aspect-[3/4] w-full bg-cover bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBqk7RT3NS0u2Bg32V-JORjVaBAcn9Kdp5HWstEQuU6LN1su6PBY-QBXa79xpFN8MSF6xZNqGRmoSioQMtov7YXlDoncNpW4a9rbJNHqSHhlk0RacOX6dNgiVSE931rKnk8gdCGmzNqxon26zJs7mp-b2LrjD0ZWeJV8TcsBZy0_hGBoz-Zy9H9IhNUnd493TQZUppb8H7072b9tNpiP8waHsATGoF-aP5mlGHk5CLwvmletP84M4rRgq7U5H9FCb7Kfwp89Rafv6g");'></div>
+<button class="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-500 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 hover:bg-white hover:text-red-500">
+<span class="material-symbols-outlined text-xl"> favorite_border </span>
+</button>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-gray-800 group-hover:text-primary-600">Ankle Boots</h3>
+<p class="text-sm font-medium text-gray-600">$120</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-gray-100">
+<div class="container mx-auto px-4 py-8 lg:px-8">
+<div class="flex flex-wrap items-center justify-between gap-6 text-center sm:text-left">
+<div class="text-sm text-gray-500">© 2024 ShopAll. All rights reserved.</div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="text-sm text-gray-600 hover:text-primary-600" href="#">About</a>
+<a class="text-sm text-gray-600 hover:text-primary-600" href="#">Contact</a>
+<a class="text-sm text-gray-600 hover:text-primary-600" href="#">Privacy Policy</a>
+<a class="text-sm text-gray-600 hover:text-primary-600" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</body></html>
