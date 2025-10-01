@@ -10,10 +10,8 @@
     {% load  modo_demo %}
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
 
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
 </head>
-
-
 
 <body>
    
@@ -101,9 +99,9 @@
     <div class='container mx-auto'>
         {% is_demo as demo %}
         {% if demo %}
-            <div class="alert alert-info" role="alert">
+            <div class="card max-w-72">
                 <!-- <strong>Atención:</strong> Estás en modo DEMO. -->
-                <ul class="m-0">
+                <ul class="card-body">
                     <li>user: admin</li>
                     <li>password: bPmTxjfYjF33Ur@</li>
                     <li><a href="/admin">Admin</a></li>

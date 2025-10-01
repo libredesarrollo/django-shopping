@@ -69,7 +69,8 @@ INSTALLED_APPS = [
 TAILWIND_APP_NAME = 'theme'
 
 # NPM_BIN_PATH = 'C:/Users/andre/.config/herd/bin/nvm/v23.11.0/npm.cmd'
-NPM_BIN_PATH = os.environ.get('NPM_BIN_PATH', 'npm')
+NPM_BIN_PATH = 'C:/Users/andre/.config/herd/bin/nvm/v22.6.0/npm.cmd'
+# NPM_BIN_PATH = os.environ.get('NPM_BIN_PATH', 'npm')
 # if platform.system() == "Windows":
 #     NPM_BIN_PATH = "C:/Users/andre/.config/herd/bin/nvm/v23.11.0/npm.cmd"
 

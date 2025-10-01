@@ -3,51 +3,82 @@
 {% block title %}🛍️ {{ product.title }}{% endblock %}
 
 {% block content %}
-    <div class="post prose-lg mb-3">
-        <h1 class="text-center !mb-0">{{ product.title }}</h1>
-        <p class="text-center text-xl !text-gray-400 mt-2">{{ product.subtitle }}</p>
-        
-        {% if product.image %}
-            <img class="post" style="view-transition-name: {{ product.slug }}" alt="{{ product.title }}" title="{{ product.title }}" src="{{ product.getImageUrl }}" />
-        {% endif %}
-        
-        <div class="flex flex-row gap-5 justify-center items-center">
-            <p class="font-bold text-green-700 m-0!">
-                {{ product.price_offert }}$
-            </p>
-            <div class="flex flex-wrap gap-2">
-                <div>
-                    <a class="btn-sm btn-success" target="_blank"  href="{% url 'b.index' %}?category_id={{ product.post.category.id }}">
-                        {{ product.post.category.title }}
-                    </a>
+
+<div class="py-12">
+    {% load check_if_exists %}
+
+    {% check_if_exists template_path as exists %}
+    {% if exists %}
+        {% include template_path %}
+    {% else %}
+        <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
+     
+            <div class="flex items-start justify-center">
+                {% if product.image %}
+                    <div class="w-full max-w-md overflow-hidden rounded-lg shadow-lg">
+                        <img src="{{ product.getImageUrl }}" alt="{{ product.title }}"
+                            class="h-full w-full object-cover" style="view-transition-name: {{ product.slug }}">
+                    </div>
+                {% endif %}
+            </div>
+
+            {# Columna de Detalles #}
+            <div class="flex flex-col justify-center">
+                <h1 class="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+                    {{ product.title }}
+                </h1>
+                <p class="mt-2 text-xl text-gray-500 dark:text-gray-400">{{ product.subtitle }}</p>
+
+                <div class="mt-6">
+                    <h2 class="sr-only">{{ _("Product information") }}</h2>
+                    <p class="text-3xl tracking-tight text-gray-900 dark:text-white">${{ product.price_offert }}</p>
                 </div>
-                {% for t in product.tags.all %}
-                    <a class="btn-sm btn-success-border" target="_blank" href="{% url 'b.index' %}?tag_id={{ t.id }}">
-                        {{ t.tag.title }}
-                    </a>
-                {% endfor %}
+
+                <div class="mt-8">
+                    <h3 class="text-sm font-medium text-gray-900 dark:text-white">{{ _("Description") }}</h3>
+                    <div class="prose prose-sm mt-4 text-gray-600 dark:text-gray-300">
+                        <p>{{ product.description }}</p>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <div class="flex items-center">
+                        <h3 class="text-sm font-medium text-gray-900 dark:text-white">{{ _("Category:") }}</h3>
+                        <a href="{% url 'b.index' %}?category_id={{ product.post.category.id }}"
+                            class="ml-2 text-sm text-primary-600 hover:text-primary-500">{{ product.post.category.title }}</a>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <h3 class="text-sm font-medium text-gray-900 dark:text-white">{{ _("Tags") }}</h3>
+                    <div class="mt-2 flex flex-wrap gap-2">
+                        {% for t in product.tags.all %}
+                            <a href="{% url 'store:blog_index' %}?tag_id={{ t.id }}" class="btn-tag">{{ t.title }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% if payment %}
+                    <div class="card card-primary my-3">
+                        <div class="card-body">
+                            <p class="m-0! text-sm">{{ _('Product already buy in:') }} {{ payment.created_at }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% include "fragment/payment/helper.html" with base_payment_url_name='s.product.payment' coupon=coupon product=product entity='product' %}
+
             </div>
         </div>
 
-        <hr class="my-3 dark:text-white">
+        <hr class="my-8 border-gray-200 dark:border-gray-700">
 
-        <section class="card mx-auto">
-            <div class="card-body">
-                {{ product.content|safe }}
-            </div>
-        </section>
+        <div class="prose prose-lg max-w-none dark:prose-invert">
+            {{ product.content|safe }}
+        </div>
+    {% endif %}
+</div>
 
-        <hr class="my-8 dark:text-white">
 
-        {% if payment %}
-            <div class="card card-primary my-3">
-                <div class="card-body">
-                    <p class="m-0! text-sm">{{ _('Product already buy in:') }} {{ payment.created_at }}</p>
-                </div>
-            </div>
-        {% endif %}
-
-        {% include "fragment/payment/helper.html" with base_payment_url_name='s.product.payment' coupon=coupon product=product entity='product' %}
-    </div>
 
 {% endblock content %}
