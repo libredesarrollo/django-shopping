@@ -36,10 +36,11 @@
                         <div>
                             <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{{ _("Tag") }}</label>
                             <div class="flex flex-wrap gap-2">
-                                {% for i, t in tags.items %}
-                                    <button type="submit" name="tag_id" value="{{ i }}"
-                                        class="rounded-full border px-3 py-1 text-sm transition-colors {% if tag_id == i %}border-primary-500 bg-primary-50 text-primary-600 font-medium{% else %}border-gray-200 text-gray-600 hover:border-primary-500 hover:bg-primary-50 hover:text-primary-600 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800{% endif %}">
-                                        {{ t }}
+                         
+                                {% for tag in tags %}
+                                    <button type="submit" name="tag_id" value="{{ tag.id }}"
+                                        class="rounded-full border px-3 py-1 text-sm transition-colors {% if tag.id|stringformat:"s" == request.GET.tag_id %}border-primary-500 bg-primary-50 text-primary-600 font-medium{% else %}border-gray-200 text-gray-600 hover:border-primary-500 hover:bg-primary-50 hover:text-primary-600 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800{% endif %}">
+                                        {{ tag.title }}
                                     </button>
                                 {% endfor %}
                             </div>
