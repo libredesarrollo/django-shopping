@@ -8,6 +8,9 @@ from django.utils.html import format_html
 from .models import Book, Product, ProductType, Payment, Coupon
 from blog.models import Taggable
 
+from django.contrib.auth.admin import UserAdmin, GroupAdmin
+from django.contrib.auth.models import User, Group
+
 from django.conf import settings
 
 class BlockAdminDemo(admin.ModelAdmin):
@@ -30,6 +33,20 @@ class BlockAdminDemo(admin.ModelAdmin):
         if getattr(settings, "DEMO", False):
             return False
         return super().has_delete_permission(request, obj)
+    
+if getattr(settings, "DEMO", False):    
+    class DemoSafeUserAdmin(BlockAdminDemo, UserAdmin):
+        pass
+
+
+    class DemoSafeGroupAdmin(BlockAdminDemo, GroupAdmin):
+        pass
+
+    admin.site.unregister(User)
+    admin.site.unregister(Group)
+
+    admin.site.register(User, DemoSafeUserAdmin)
+    admin.site.register(Group, DemoSafeGroupAdmin)    
 
 class BookForm(forms.ModelForm):
     class Meta:
