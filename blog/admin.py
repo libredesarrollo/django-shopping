@@ -5,13 +5,15 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 
 from .models import Category, Tag, Post, Taggable
 
-class CategoryAdmin(admin.ModelAdmin):
+from store.admin import BlockAdminDemo
+
+class CategoryAdmin(BlockAdminDemo):
     list_display = ('id', 'title')
     prepopulated_fields = {'slug': ('title',) }
 
 admin.site.register(Category, CategoryAdmin)
 
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(BlockAdminDemo):
     list_display = ('id', 'title')
     prepopulated_fields = {'slug': ('title',) }
 
@@ -31,7 +33,7 @@ class TaggableInline(GenericTabularInline):
     extra = 1
 
 @admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(BlockAdminDemo):
     prepopulated_fields = {'slug': ('title',) }
     inlines = [TaggableInline]
     form = PostForm

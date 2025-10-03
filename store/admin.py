@@ -8,6 +8,29 @@ from django.utils.html import format_html
 from .models import Book, Product, ProductType, Payment, Coupon
 from blog.models import Taggable
 
+from django.conf import settings
+
+class BlockAdminDemo(admin.ModelAdmin):
+    """
+    Admin que bloquea add/change/delete si settings.DEMO = True
+    pero permite solo lectura.
+    """
+
+    def has_add_permission(self, request):
+        if getattr(settings, "DEMO", False):
+            return False
+        return super().has_add_permission(request)
+
+    def has_change_permission(self, request, obj=None):
+        if getattr(settings, "DEMO", False):
+            return False
+        return super().has_change_permission(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        if getattr(settings, "DEMO", False):
+            return False
+        return super().has_delete_permission(request, obj)
+
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
@@ -22,7 +45,7 @@ class TaggableInline(GenericTabularInline):
     extra = 1
 
 @admin.register(Book)
-class BookAdmin(admin.ModelAdmin):
+class BookAdmin(BlockAdminDemo):
     prepopulated_fields = {'slug': ('title',) }
     inlines = [TaggableInline]
     form = BookForm
@@ -39,21 +62,21 @@ class ProductForm(forms.ModelForm):
         }
         
 @admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(BlockAdminDemo):
     prepopulated_fields = {'slug': ('title',) }
     inlines = [TaggableInline]
     form = ProductForm
     
 # tipo producto
 @admin.register(ProductType)
-class ProductTypeAdmin(admin.ModelAdmin):
+class ProductTypeAdmin(BlockAdminDemo):
     list_display = ('id', 'title')
     prepopulated_fields = {'slug': ('title',) }
 # admin.site.register(ProductType, ProductTypeAdmin)
 
 #**** producto
 @admin.register(Payment)
-class PaymentAdmin(admin.ModelAdmin):
+class PaymentAdmin(BlockAdminDemo):
     list_display = ('id','created_at', 'user', 'short_orderId','type', 'price', 'coupon')
     list_filter = ('user', 'type')
     search_fields = ('id', 'user__username', 'type', 'trace', 'orderId', 'coupon') 
@@ -67,7 +90,7 @@ class PaymentAdmin(admin.ModelAdmin):
     
 # Coupon
 @admin.register(Coupon)
-class CouponAdmin(admin.ModelAdmin):
+class CouponAdmin(BlockAdminDemo):
     list_display = ('id', 'price', 'coupon', 'created_at', 'coupon', 'user_info')
     fields = ('price','coupon')
     
