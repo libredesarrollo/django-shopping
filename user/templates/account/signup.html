@@ -9,10 +9,20 @@
 {% block extra_head %}
         {% load static tailwind_tags %}
         {% tailwind_css %}
-        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
 {% endblock extra_head %}
 
 {% block content %}
+
+<style>
+    ul {
+        margin-left: 20px;
+    }
+    ul li{
+        color: #999;
+        font-size: 12px;
+        list-style-type: disc;
+    }
+</style>
 
 <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
     <div class="w-full max-w-md space-y-8">

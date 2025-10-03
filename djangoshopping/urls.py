@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from user.views import ToggleThemeView
 from django.views.generic.base import RedirectView
+from allauth.account.views import LoginView, LogoutView
 
 from django.conf import settings
 
@@ -31,8 +32,22 @@ urlpatterns = [
     path("accounts/", include('user.urls')),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
     # django auth all
-    path('accounts/', include('allauth.urls')),
+    # path('accounts/', include('allauth.urls')),
+    path('accounts/login/', LoginView.as_view(), name='account_login'),
     path('i18n/', include('django.conf.urls.i18n')), 
     path('', RedirectView.as_view(url='/store/product')),#, permanent=True
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+if settings.DEMO:
+    urlpatterns += [
+        path('accounts/login', LoginView.as_view(), name='account_login'), 
+        path('accounts/logout', LogoutView.as_view(), name='account_logout'), 
+        # puedes sustituir por una pagina info
+        path('accounts/signup',RedirectView.as_view(url='/store/product'), name='account_signup'),  
+    ]
+else:
+    urlpatterns += [
+        path('accounts/', include('allauth.urls')),
+    ]
