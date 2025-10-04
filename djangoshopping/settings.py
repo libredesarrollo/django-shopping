@@ -38,7 +38,7 @@ SECRET_KEY = 'django-insecure-6)c9xu_htu$i75jwil1i^=stjyl69s4=szlor0c#6hs#o33w4w
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-DEMO = True
+DEMO = False
 
 PAYPAL_PRODUCTION = os.environ.get('PAYPAL_PRODUCTION', True)
 
@@ -69,7 +69,7 @@ INSTALLED_APPS = [
 TAILWIND_APP_NAME = 'theme'
 
 # NPM_BIN_PATH = 'C:/Users/andre/.config/herd/bin/nvm/v23.11.0/npm.cmd'
-NPM_BIN_PATH = 'C:/Users/andre/.config/herd/bin/nvm/v22.6.0/npm.cmd'
+# NPM_BIN_PATH = 'C:/Users/andre/.config/herd/bin/nvm/v22.6.0/npm.cmd'
 # NPM_BIN_PATH = os.environ.get('NPM_BIN_PATH', 'npm')
 # if platform.system() == "Windows":
 #     NPM_BIN_PATH = "C:/Users/andre/.config/herd/bin/nvm/v23.11.0/npm.cmd"
