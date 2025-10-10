@@ -91,6 +91,19 @@
                 <a href="{% url 'b.index' %}" class="text-gray-700 dark:text-white text-center px-4 py-3 m-1 italic">
                     {{ _('Blog') }}
                 </a>
+                <a href="{% url 's.b.index' %}"
+                    class="text-gray-700 dark:text-white text-center px-4 py-3 m-1 italic">
+                    {{ _('Store Book') }}
+
+                </a>
+                <a href="{% url 's.p.index' %}"
+                    class="text-gray-700 dark:text-white text-center px-4 py-3 m-1 italic">
+                    {{ _('Store') }}
+                </a>
+                <a href="{% url 's.p.t.index' 'desks' %}"
+                    class="text-gray-700 dark:text-white text-center px-4 py-3 m-1 italic">
+                    {{ _('Desks') }}
+                </a>
             </div>
         </div>
 
@@ -102,9 +115,14 @@
             <div class="card max-w-72">
                 <!-- <strong>Atención:</strong> Estás en modo DEMO. -->
                 <ul class="card-body">
-                    <li>user: admin</li>
+                    <li>user(admin): admin</li>
                     <li>password: bPmTxjfYjF33Ur@</li>
-                    <li><a href="/admin">Admin</a></li>
+                    <li><a href="/admin" class='underline'>Admin Login</a></li>
+                    <li><hr/></li>
+                    
+                    <li>user(regular): test</li>
+                    <li>password: bPmTxjfYjF33Ur@</li>
+                    <li><a href="{% url 'account_login' %}" class='underline'>Regular Login</a></li>
                 </ul>
             </div>
         {% endif %} 
